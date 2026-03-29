@@ -8,10 +8,12 @@ def pantalla_principal():
                 {
                     "type": "Container",
                     "direction": "column",
+                    "width": "100%",
+                    "height": "100%",
+                    "alignItems": "center",
+                    "justifyContent": "center",
                     "backgroundColor": "#0f0f0f",
-                    "paddingLeft": "30dp",
-                    "paddingRight": "30dp",
-                    "paddingTop": "20dp",
+
                     "items": [
 
                         # 🎓 TÍTULO
@@ -19,7 +21,8 @@ def pantalla_principal():
                             "type": "Text",
                             "text": "Asistente C",
                             "fontSize": "50dp",
-                            "color": "white"
+                            "color": "white",
+                            "textAlign": "center"
                         },
 
                         # 📚 SUBTÍTULO
@@ -27,22 +30,25 @@ def pantalla_principal():
                             "type": "Text",
                             "text": "Desliza →",
                             "fontSize": "25dp",
-                            "color": "#888888",
+                            "color": "#888",
                             "marginTop": "10dp"
                         },
 
-                        # 🎬 CARRUSEL MEJORADO
+                        # 🎬 CARRUSEL
                         {
                             "type": "Sequence",
                             "scrollDirection": "horizontal",
                             "height": "200dp",
-                            "marginTop": "20dp",
+                            "width": "80%",  # 🔥 controla el ancho del carrusel
+                            "marginTop": "30dp",
+
                             "data": [
                                 {"titulo": "Matemáticas", "accion": "mate"},
                                 {"titulo": "Lenguaje", "accion": "lenguaje"},
                                 {"titulo": "Memoria", "accion": "memoria"},
                                 {"titulo": "Música", "accion": "musica"}
                             ],
+
                             "items": {
                                 "type": "TouchWrapper",
                                 "onPress": {
@@ -51,20 +57,21 @@ def pantalla_principal():
                                 },
                                 "item": {
                                     "type": "Container",
-                                    "width": "300dp",
+                                    "width": "280dp",
                                     "height": "180dp",
                                     "marginRight": "20dp",
                                     "backgroundColor": "#1f1f1f",
                                     "borderRadius": "20dp",
+
                                     "items": [
                                         {
                                             "type": "Text",
                                             "text": "${data.titulo}",
                                             "color": "white",
-                                            "fontSize": "30dp",
-                                            "horizontalAlignment": "center",
-                                            "verticalAlignment": "center",
-                                            "height": "100%"
+                                            "fontSize": "28dp",
+                                            "textAlign": "center",
+                                            "height": "100%",
+                                            "verticalAlignment": "center"
                                         }
                                     ]
                                 }
