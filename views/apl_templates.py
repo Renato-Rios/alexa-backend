@@ -12,23 +12,20 @@ def pantalla_principal():
                     "height": "100%",
                     "alignItems": "center",
                     "justifyContent": "center",
-
-                    # 🔥 COLOR DE FONDO CORRECTO
                     "backgroundColor": "#FDF0D5",
 
                     "items": [
 
-                        # 🎓 TÍTULO
                         {
                             "type": "Text",
                             "text": "Asistente C",
                             "fontSize": "60dp",
-                            "color": "#003049",
+                            "color": "#Whitesmoke",
                             "textAlign": "center",
                             "marginBottom": "40dp"
                         },
 
-                        # 📘 BOTÓN APRENDER
+                        # 🔥 BOTÓN APRENDER (FIX)
                         {
                             "type": "TouchWrapper",
                             "onPress": {
@@ -36,16 +33,11 @@ def pantalla_principal():
                                 "arguments": ["aprender"]
                             },
                             "item": {
-                                "type": "Container",
+                                "type": "Frame",  # 👈 CAMBIO CLAVE
                                 "width": "70%",
                                 "height": "180dp",
-
-                                # 🔥 COLOR CORRECTO
                                 "backgroundColor": "#003049",
-
-                                # 🔥 BORDE REDONDO CORRECTO
                                 "borderRadius": "25dp",
-
                                 "justifyContent": "center",
                                 "alignItems": "center",
 
@@ -60,7 +52,7 @@ def pantalla_principal():
                             }
                         },
 
-                        # 🎵 BOTÓN MÚSICA
+                        # 🔥 BOTÓN MÚSICA (FIX)
                         {
                             "type": "TouchWrapper",
                             "onPress": {
@@ -68,16 +60,12 @@ def pantalla_principal():
                                 "arguments": ["musica"]
                             },
                             "item": {
-                                "type": "Container",
+                                "type": "Frame",  # 👈 CAMBIO CLAVE
                                 "width": "50%",
                                 "height": "100dp",
                                 "marginTop": "30dp",
-
-                                # 🔥 COLOR CORRECTO
                                 "backgroundColor": "#780000",
-
                                 "borderRadius": "20dp",
-
                                 "justifyContent": "center",
                                 "alignItems": "center",
 
