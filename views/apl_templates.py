@@ -6,7 +6,8 @@ def pantalla_principal():
             "parameters": ["payload"],
             "items": [
                 {
-                    "type": "Frame",
+                    # 👇 ESTE SÍ ES EL CONTENEDOR PRINCIPAL
+                    "type": "Container",
                     "direction": "column",
                     "width": "100%",
                     "height": "100%",
@@ -16,16 +17,17 @@ def pantalla_principal():
 
                     "items": [
 
+                        # 🔤 TÍTULO
                         {
                             "type": "Text",
                             "text": "Asistente C",
                             "fontSize": "60dp",
-                            "color": "#ffffff",
+                            "color": "#003049",
                             "textAlign": "center",
                             "marginBottom": "40dp"
                         },
 
-                        # 🔥 BOTÓN APRENDER (FIX)
+                        # 📘 BOTÓN APRENDER
                         {
                             "type": "TouchWrapper",
                             "onPress": {
@@ -33,9 +35,9 @@ def pantalla_principal():
                                 "arguments": ["aprender"]
                             },
                             "item": {
-                                "type": "Frame",  # 👈 CAMBIO CLAVE
-                                "width": "60dp",
-                                "height": "50dp",
+                                "type": "Frame",
+                                "width": "60%",   # 🔥 RESPONSIVE
+                                "height": "120dp",
                                 "backgroundColor": "#003049",
                                 "borderRadius": "25dp",
                                 "justifyContent": "center",
@@ -45,14 +47,14 @@ def pantalla_principal():
                                     {
                                         "type": "Text",
                                         "text": "Aprender",
-                                        "fontSize": "40dp",
+                                        "fontSize": "30dp",
                                         "color": "white"
                                     }
                                 ]
                             }
                         },
 
-                        # 🔥 BOTÓN MÚSICA (FIX)
+                        # 🎵 BOTÓN MÚSICA
                         {
                             "type": "TouchWrapper",
                             "onPress": {
@@ -60,12 +62,12 @@ def pantalla_principal():
                                 "arguments": ["musica"]
                             },
                             "item": {
-                                "type": "Frame",  # 👈 CAMBIO CLAVE
-                                "width": "60dp",
-                                "height": "50dp",
+                                "type": "Frame",
+                                "width": "60%",
+                                "height": "120dp",
                                 "marginTop": "30dp",
                                 "backgroundColor": "#780000",
-                                "borderRadius": "20dp",
+                                "borderRadius": "25dp",
                                 "justifyContent": "center",
                                 "alignItems": "center",
 
@@ -73,7 +75,7 @@ def pantalla_principal():
                                     {
                                         "type": "Text",
                                         "text": "Música",
-                                        "fontSize": "40dp",
+                                        "fontSize": "30dp",
                                         "color": "white"
                                     }
                                 ]
