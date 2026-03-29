@@ -12,8 +12,9 @@ def pantalla_principal():
                     "height": "100%",
                     "alignItems": "center",
                     "justifyContent": "center",
-                    "backgroundColor": "#FDF0D5",
-
+                    "style": {
+                        "backgroundColor": "#FDF0D5"
+                    },
                     "items": [
 
                         # TÍTULO
@@ -37,8 +38,10 @@ def pantalla_principal():
                                 "type": "Container",
                                 "width": "70%",
                                 "height": "180dp",
-                                "backgroundColor": "#003049",
-                                "borderRadius": "25dp",
+                                "style": {
+                                    "backgroundColor": "#003049",
+                                    "borderRadius": "25dp"
+                                },
                                 "justifyContent": "center",
                                 "alignItems": "center",
 
@@ -65,8 +68,10 @@ def pantalla_principal():
                                 "width": "50%",
                                 "height": "100dp",
                                 "marginTop": "30dp",
-                                "backgroundColor": "#780000",
-                                "borderRadius": "20dp",
+                                "style": {
+                                    "backgroundColor": "#780000",
+                                    "borderRadius": "20dp"
+                                },
                                 "justifyContent": "center",
                                 "alignItems": "center",
 
