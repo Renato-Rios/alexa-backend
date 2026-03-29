@@ -10,16 +10,16 @@ def manejar_request(data):
         return jsonify({
             "version": "1.0",
             "response": {
-                "outputSpeech": {
-                    "type": "PlainText",
-                    "text": "Estamos en Asistente C"
-                },
-                "directives": [
-                    {
-                        "type": "Alexa.Presentation.APL.RenderDocument",
-                        "token": "pantallaPrincipal",
-                        "document": pantalla_principal()
-                    }
+            "outputSpeech": {
+                "type": "PlainText",
+                "text": "Estamos en Asistente C"
+            },
+            "directives": [
+                {
+                    "type": "Alexa.Presentation.APL.RenderDocument",
+                    "token": "main",
+                    "document": pantalla_principal()
+                }
                 ],
                 "shouldEndSession": False
             }
