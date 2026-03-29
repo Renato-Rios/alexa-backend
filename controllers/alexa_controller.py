@@ -6,9 +6,9 @@ def manejar_request(data):
     interfaces = data["context"]["System"]["device"]["supportedInterfaces"]
     tiene_apl = "Alexa.Presentation.APL" in interfaces
 
-    request_type = data["request"]["type"]
+    tipo = data["request"]["type"]
 
-    if request_type == "LaunchRequest":
+    if tipo == "LaunchRequest":
 
         return jsonify({
             "version": "1.0",

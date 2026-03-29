@@ -1,5 +1,3 @@
-
-"""
 def pantalla_principal():
     return {
         "type": "APL",
@@ -88,24 +86,6 @@ def pantalla_principal():
                             }
                         }
                     ]
-                }
-            ]
-        }
-    }
-"""
-
-def pantalla_principal():
-    return {
-        "type": "APL",
-        "version": "1.7",
-        "mainTemplate": {
-            "parameters": ["payload"],
-            "items": [
-                {
-                    "type": "Text",
-                    "text": "SI VES ESTO, YA FUNCIONA",
-                    "fontSize": "50dp",
-                    "color": "white"
                 }
             ]
         }
