@@ -7,23 +7,36 @@ def alexa():
     data = request.json
 
     try:
-        intent = data["request"]["intent"]["name"]
+        request_type = data["request"]["type"]
 
-        if intent == "HablarIntent":
-            mensaje = data["request"]["intent"]["slots"]["mensaje"]["value"]
-
-            print("Alexa dijo:", mensaje)
-
+        # 👉 CUANDO ABRES LA SKILL
+        if request_type == "LaunchRequest":
             return jsonify({
                 "version": "1.0",
                 "response": {
                     "outputSpeech": {
                         "type": "PlainText",
-                        "text": mensaje
+                        "text": "Estamos en Asistente C"
                     },
                     "shouldEndSession": False
                 }
             })
+
+        # 👉 CUANDO DICES UN COMANDO
+        if request_type == "IntentRequest":
+            intent = data["request"]["intent"]["name"]
+
+            if intent == "HablarIntent":
+                return jsonify({
+                    "version": "1.0",
+                    "response": {
+                        "outputSpeech": {
+                            "type": "PlainText",
+                            "text": "Hola mundo"
+                        },
+                        "shouldEndSession": False
+                    }
+                })
 
     except Exception as e:
         print("Error:", e)
@@ -33,13 +46,13 @@ def alexa():
         "response": {
             "outputSpeech": {
                 "type": "PlainText",
-                "text": "No entendí"
-            },
-            "shouldEndSession": False
+                "text": "Error"
+            }
         }
     })
 
-# 👇 IMPORTANTE PARA RENDER
+
+# 👉 IMPORTANTE PARA RENDER
 if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 5000))
