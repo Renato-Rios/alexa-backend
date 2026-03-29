@@ -12,7 +12,7 @@ def pantalla_principal():
                     "height": "100%",
                     "alignItems": "center",
                     "justifyContent": "center",
-                    "backgroundColor": "#0f0f0f",
+                    "backgroundColor": "#FDF0D5",
 
                     "items": [
 
@@ -22,59 +22,64 @@ def pantalla_principal():
                             "text": "Asistente C",
                             "fontSize": "50dp",
                             "color": "white",
-                            "textAlign": "center"
+                            "textAlign": "center",
+                            "marginBottom": "40dp"
                         },
 
-                        # 📚 SUBTÍTULO
+                        #BOTÓN APRENDER (GRANDE)
                         {
-                            "type": "Text",
-                            "text": "Desliza →",
-                            "fontSize": "25dp",
-                            "color": "#888",
-                            "marginTop": "10dp"
+                            "type": "TouchWrapper",
+                            "onPress": {
+                                "type": "SendEvent",
+                                "arguments": ["aprender"]
+                            },
+                            "item": {
+                                "type": "Container",
+                                "width": "70%",
+                                "height": "180dp",
+                                "backgroundColor": "#003049",
+                                "borderRadius": "25dp",
+                                "justifyContent": "center",
+                                "alignItems": "center",
+                                "shadow": True,
+
+                                "items": [
+                                    {
+                                        "type": "Text",
+                                        "text": "Aprender",
+                                        "fontSize": "40dp",
+                                        "color": "white",
+                                        "textAlign": "center"
+                                    }
+                                ]
+                            }
                         },
 
-                        # 🎬 CARRUSEL
+                        # BOTÓN MÚSICA (PEQUEÑO)
                         {
-                            "type": "Sequence",
-                            "scrollDirection": "horizontal",
-                            "height": "200dp",
-                            "width": "80%",  # 🔥 controla el ancho del carrusel
-                            "marginTop": "30dp",
+                            "type": "TouchWrapper",
+                            "onPress": {
+                                "type": "SendEvent",
+                                "arguments": ["musica"]
+                            },
+                            "item": {
+                                "type": "Container",
+                                "width": "50%",
+                                "height": "100dp",
+                                "marginTop": "30dp",
+                                "backgroundColor": "#780000",
+                                "borderRadius": "20dp",
+                                "justifyContent": "center",
+                                "alignItems": "center",
 
-                            "data": [
-                                {"titulo": "Matemáticas", "accion": "mate"},
-                                {"titulo": "Lenguaje", "accion": "lenguaje"},
-                                {"titulo": "Memoria", "accion": "memoria"},
-                                {"titulo": "Música", "accion": "musica"}
-                            ],
-
-                            "items": {
-                                "type": "TouchWrapper",
-                                "onPress": {
-                                    "type": "SendEvent",
-                                    "arguments": ["${data.accion}"]
-                                },
-                                "item": {
-                                    "type": "Container",
-                                    "width": "280dp",
-                                    "height": "180dp",
-                                    "marginRight": "20dp",
-                                    "backgroundColor": "#1f1f1f",
-                                    "borderRadius": "20dp",
-
-                                    "items": [
-                                        {
-                                            "type": "Text",
-                                            "text": "${data.titulo}",
-                                            "color": "white",
-                                            "fontSize": "28dp",
-                                            "textAlign": "center",
-                                            "height": "100%",
-                                            "verticalAlignment": "center"
-                                        }
-                                    ]
-                                }
+                                "items": [
+                                    {
+                                        "type": "Text",
+                                        "text": "Música",
+                                        "fontSize": "28dp",
+                                        "color": "white"
+                                    }
+                                ]
                             }
                         }
                     ]
