@@ -23,8 +23,8 @@ def pantalla_principal():
                             },
                             "item": {
                                 "type": "Text",
-                                "text": "🎵 Música",
-                                "fontSize": "40dp"
+                                "text": "Música",
+                                "fontSize": "80dp"
                             }
                         },
                         {
@@ -35,8 +35,8 @@ def pantalla_principal():
                             },
                             "item": {
                                 "type": "Text",
-                                "text": "📘 Aprender",
-                                "fontSize": "40dp"
+                                "text": "Aprender",
+                                "fontSize": "80dp"
                             }
                         }
                     ]
