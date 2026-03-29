@@ -34,8 +34,8 @@ def pantalla_principal():
                             },
                             "item": {
                                 "type": "Frame",  # 👈 CAMBIO CLAVE
-                                "width": "50%",
-                                "height": "50%",
+                                "width": "60%",
+                                "height": "30%",
                                 "backgroundColor": "#003049",
                                 "borderRadius": "25dp",
                                 "justifyContent": "center",
@@ -61,8 +61,8 @@ def pantalla_principal():
                             },
                             "item": {
                                 "type": "Frame",  # 👈 CAMBIO CLAVE
-                                "width": "50%",
-                                "height": "50%",
+                                "width": "60%",
+                                "height": "30%",
                                 "marginTop": "30dp",
                                 "backgroundColor": "#780000",
                                 "borderRadius": "20dp",
