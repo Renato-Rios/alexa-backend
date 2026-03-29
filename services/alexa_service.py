@@ -8,7 +8,7 @@ def procesar_accion(accion):
     elif accion == "memoria":
         return "Ejercicios de memoria"
     
-    elif accion == "juegos":
-        return "Modo juegos activado"
+    elif accion == "musica":
+        return "Entrando a música"
 
     return "No entendí"

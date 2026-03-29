@@ -8,15 +8,16 @@ def pantalla_principal():
                 {
                     "type": "Container",
                     "direction": "column",
-                    "paddingLeft": "20dp",
-                    "paddingRight": "20dp",
+                    "backgroundColor": "#0f0f0f",
+                    "paddingLeft": "30dp",
+                    "paddingRight": "30dp",
                     "paddingTop": "20dp",
                     "items": [
 
-                        # 🔥 TÍTULO
+                        # 🎓 TÍTULO
                         {
                             "type": "Text",
-                            "text": "🎓 Asistente C",
+                            "text": "Asistente C",
                             "fontSize": "50dp",
                             "color": "white"
                         },
@@ -24,21 +25,23 @@ def pantalla_principal():
                         # 📚 SUBTÍTULO
                         {
                             "type": "Text",
-                            "text": "Aprendizaje",
-                            "fontSize": "30dp",
-                            "marginTop": "20dp",
-                            "color": "#AAAAAA"
+                            "text": "Desliza →",
+                            "fontSize": "25dp",
+                            "color": "#888888",
+                            "marginTop": "10dp"
                         },
 
-                        # 🎬 CARRUSEL
+                        # 🎬 CARRUSEL MEJORADO
                         {
                             "type": "Sequence",
                             "scrollDirection": "horizontal",
+                            "height": "200dp",
+                            "marginTop": "20dp",
                             "data": [
                                 {"titulo": "Matemáticas", "accion": "mate"},
                                 {"titulo": "Lenguaje", "accion": "lenguaje"},
                                 {"titulo": "Memoria", "accion": "memoria"},
-                                {"titulo": "Juegos", "accion": "juegos"}
+                                {"titulo": "Música", "accion": "musica"}
                             ],
                             "items": {
                                 "type": "TouchWrapper",
@@ -48,18 +51,20 @@ def pantalla_principal():
                                 },
                                 "item": {
                                     "type": "Container",
-                                    "width": "250dp",
-                                    "height": "150dp",
-                                    "marginRight": "15dp",
+                                    "width": "300dp",
+                                    "height": "180dp",
+                                    "marginRight": "20dp",
                                     "backgroundColor": "#1f1f1f",
-                                    "borderRadius": "12dp",
-                                    "padding": "10dp",
+                                    "borderRadius": "20dp",
                                     "items": [
                                         {
                                             "type": "Text",
                                             "text": "${data.titulo}",
                                             "color": "white",
-                                            "fontSize": "25dp"
+                                            "fontSize": "30dp",
+                                            "horizontalAlignment": "center",
+                                            "verticalAlignment": "center",
+                                            "height": "100%"
                                         }
                                     ]
                                 }
