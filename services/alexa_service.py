@@ -1,6 +1,6 @@
 def procesar_accion(accion):
-    if accion == "lenguaje":
-        return "Entrando a lenguaje"
+    if accion == "aprender":
+        return "Entrando a aprender"
     
     elif accion == "musica":
         return "Entrando a música"
