@@ -8,35 +8,61 @@ def pantalla_principal():
                 {
                     "type": "Container",
                     "direction": "column",
+                    "paddingLeft": "20dp",
+                    "paddingRight": "20dp",
+                    "paddingTop": "20dp",
                     "items": [
+
+                        # 🔥 TÍTULO
                         {
                             "type": "Text",
-                            "text": "Asistente C",
-                            "fontSize": "60dp",
-                            "horizontalAlignment": "center"
+                            "text": "🎓 Asistente C",
+                            "fontSize": "50dp",
+                            "color": "white"
                         },
+
+                        # 📚 SUBTÍTULO
                         {
-                            "type": "TouchWrapper",
-                            "onPress": {
-                                "type": "SendEvent",
-                                "arguments": ["musica"]
-                            },
-                            "item": {
-                                "type": "Text",
-                                "text": "Música",
-                                "fontSize": "80dp"
-                            }
+                            "type": "Text",
+                            "text": "Aprendizaje",
+                            "fontSize": "30dp",
+                            "marginTop": "20dp",
+                            "color": "#AAAAAA"
                         },
+
+                        # 🎬 CARRUSEL
                         {
-                            "type": "TouchWrapper",
-                            "onPress": {
-                                "type": "SendEvent",
-                                "arguments": ["aprender"]
-                            },
-                            "item": {
-                                "type": "Text",
-                                "text": "Aprender",
-                                "fontSize": "80dp"
+                            "type": "Sequence",
+                            "scrollDirection": "horizontal",
+                            "data": [
+                                {"titulo": "Matemáticas", "accion": "mate"},
+                                {"titulo": "Lenguaje", "accion": "lenguaje"},
+                                {"titulo": "Memoria", "accion": "memoria"},
+                                {"titulo": "Juegos", "accion": "juegos"}
+                            ],
+                            "items": {
+                                "type": "TouchWrapper",
+                                "onPress": {
+                                    "type": "SendEvent",
+                                    "arguments": ["${data.accion}"]
+                                },
+                                "item": {
+                                    "type": "Container",
+                                    "width": "250dp",
+                                    "height": "150dp",
+                                    "marginRight": "15dp",
+                                    "backgroundColor": "#1f1f1f",
+                                    "borderRadius": "12dp",
+                                    "padding": "10dp",
+                                    "items": [
+                                        {
+                                            "type": "Text",
+                                            "text": "${data.titulo}",
+                                            "color": "white",
+                                            "fontSize": "25dp"
+                                        }
+                                    ]
+                                }
                             }
                         }
                     ]
