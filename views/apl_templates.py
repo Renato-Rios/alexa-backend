@@ -20,7 +20,7 @@ def pantalla_principal():
                         {
                             "type": "Text",
                             "text": "Asistente C",
-                            "fontSize": "50dp",
+                            "fontSize": "60dp",
                             "color": "white",
                             "textAlign": "center",
                             "marginBottom": "40dp"
@@ -76,7 +76,7 @@ def pantalla_principal():
                                     {
                                         "type": "Text",
                                         "text": "Música",
-                                        "fontSize": "28dp",
+                                        "fontSize": "40dp",
                                         "color": "white"
                                     }
                                 ]
