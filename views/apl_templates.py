@@ -38,7 +38,7 @@ def pantalla_principal():
                                             "type": "Text",
                                             "text": "Asistente C",
                                             "fontSize": "60dp",
-                                            "color": "#D7D7D7",
+                                            "color": "#303030",
                                             "marginBottom": "40dp"
                                         },
 
@@ -51,8 +51,8 @@ def pantalla_principal():
                                             },
                                             "item": {
                                                 "type": "Frame",
-                                                "width": "60%",
-                                                "height": "80dp",
+                                                "width": "70%",
+                                                "height": "60dp",
                                                 "backgroundColor": "#003049",
                                                 "borderRadius": "25dp",
                                                 "justifyContent": "center",
@@ -78,8 +78,8 @@ def pantalla_principal():
                                             },
                                             "item": {
                                                 "type": "Frame",
-                                                "width": "60%",
-                                                "height": "80dp",
+                                                "width": "70%",
+                                                "height": "60dp",
                                                 "marginTop": "30dp",
                                                 "backgroundColor": "#780000",
                                                 "borderRadius": "25dp",
