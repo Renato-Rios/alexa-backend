@@ -20,7 +20,7 @@ def pantalla_principal():
                             "type": "Text",
                             "text": "Asistente C",
                             "fontSize": "60dp",
-                            "color": "#Whitesmoke",
+                            "color": "#White",
                             "textAlign": "center",
                             "marginBottom": "40dp"
                         },
@@ -34,8 +34,8 @@ def pantalla_principal():
                             },
                             "item": {
                                 "type": "Frame",  # 👈 CAMBIO CLAVE
-                                "width": "70%",
-                                "height": "180dp",
+                                "width": "50%",
+                                "height": "20%",
                                 "backgroundColor": "#003049",
                                 "borderRadius": "25dp",
                                 "justifyContent": "center",
@@ -62,7 +62,7 @@ def pantalla_principal():
                             "item": {
                                 "type": "Frame",  # 👈 CAMBIO CLAVE
                                 "width": "50%",
-                                "height": "100dp",
+                                "height": "20%",
                                 "marginTop": "30dp",
                                 "backgroundColor": "#780000",
                                 "borderRadius": "20dp",
