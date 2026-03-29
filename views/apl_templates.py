@@ -12,22 +12,23 @@ def pantalla_principal():
                     "height": "100%",
                     "alignItems": "center",
                     "justifyContent": "center",
-                    "style": {
-                        "backgroundColor": "#FDF0D5"
-                    },
+
+                    # 🔥 COLOR DE FONDO CORRECTO
+                    "backgroundColor": "#FDF0D5",
+
                     "items": [
 
-                        # TÍTULO
+                        # 🎓 TÍTULO
                         {
                             "type": "Text",
                             "text": "Asistente C",
                             "fontSize": "60dp",
-                            "color": "white",
+                            "color": "#003049",
                             "textAlign": "center",
                             "marginBottom": "40dp"
                         },
 
-                        #BOTÓN APRENDER
+                        # 📘 BOTÓN APRENDER
                         {
                             "type": "TouchWrapper",
                             "onPress": {
@@ -38,10 +39,13 @@ def pantalla_principal():
                                 "type": "Container",
                                 "width": "70%",
                                 "height": "180dp",
-                                "style": {
-                                    "backgroundColor": "#003049",
-                                    "borderRadius": "25dp"
-                                },
+
+                                # 🔥 COLOR CORRECTO
+                                "backgroundColor": "#003049",
+
+                                # 🔥 BORDE REDONDO CORRECTO
+                                "borderRadius": "25dp",
+
                                 "justifyContent": "center",
                                 "alignItems": "center",
 
@@ -56,7 +60,7 @@ def pantalla_principal():
                             }
                         },
 
-                        #BOTÓN MÚSICA
+                        # 🎵 BOTÓN MÚSICA
                         {
                             "type": "TouchWrapper",
                             "onPress": {
@@ -68,10 +72,12 @@ def pantalla_principal():
                                 "width": "50%",
                                 "height": "100dp",
                                 "marginTop": "30dp",
-                                "style": {
-                                    "backgroundColor": "#780000",
-                                    "borderRadius": "20dp"
-                                },
+
+                                # 🔥 COLOR CORRECTO
+                                "backgroundColor": "#780000",
+
+                                "borderRadius": "20dp",
+
                                 "justifyContent": "center",
                                 "alignItems": "center",
 
