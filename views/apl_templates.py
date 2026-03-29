@@ -6,7 +6,7 @@ def pantalla_principal():
             "parameters": ["payload"],
             "items": [
                 {
-                    "type": "Container",
+                    "type": "Frame",
                     "direction": "column",
                     "width": "100%",
                     "height": "100%",
@@ -34,8 +34,8 @@ def pantalla_principal():
                             },
                             "item": {
                                 "type": "Frame",  # 👈 CAMBIO CLAVE
-                                "width": "60%",
-                                "height": "30%",
+                                "width": "60dp",
+                                "height": "50dp",
                                 "backgroundColor": "#003049",
                                 "borderRadius": "25dp",
                                 "justifyContent": "center",
@@ -61,8 +61,8 @@ def pantalla_principal():
                             },
                             "item": {
                                 "type": "Frame",  # 👈 CAMBIO CLAVE
-                                "width": "60%",
-                                "height": "30%",
+                                "width": "60dp",
+                                "height": "50dp",
                                 "marginTop": "30dp",
                                 "backgroundColor": "#780000",
                                 "borderRadius": "20dp",
