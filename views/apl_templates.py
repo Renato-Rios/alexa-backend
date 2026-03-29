@@ -16,7 +16,7 @@ def pantalla_principal():
 
                     "items": [
 
-                        # 🎓 TÍTULO
+                        # TÍTULO
                         {
                             "type": "Text",
                             "text": "Asistente C",
@@ -26,7 +26,7 @@ def pantalla_principal():
                             "marginBottom": "40dp"
                         },
 
-                        #BOTÓN APRENDER (GRANDE)
+                        #BOTÓN APRENDER
                         {
                             "type": "TouchWrapper",
                             "onPress": {
@@ -41,21 +41,19 @@ def pantalla_principal():
                                 "borderRadius": "25dp",
                                 "justifyContent": "center",
                                 "alignItems": "center",
-                                "shadow": True,
 
                                 "items": [
                                     {
                                         "type": "Text",
                                         "text": "Aprender",
                                         "fontSize": "40dp",
-                                        "color": "white",
-                                        "textAlign": "center"
+                                        "color": "white"
                                     }
                                 ]
                             }
                         },
 
-                        # BOTÓN MÚSICA (PEQUEÑO)
+                        #BOTÓN MÚSICA
                         {
                             "type": "TouchWrapper",
                             "onPress": {
