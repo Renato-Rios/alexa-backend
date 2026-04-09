@@ -75,7 +75,7 @@ def manejar_request(data):
                     "shouldEndSession": False
                 }
             })
-        #Ayuda
+        # Ayuda
         if intent == "AMAZON.HelpIntent":
             return jsonify({
                 "version": "1.0",
