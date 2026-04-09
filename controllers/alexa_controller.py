@@ -35,7 +35,7 @@ def manejar_request(data):
             }
         })
 
-    # 🔥 Botones
+    # Botones
     if tipo == "Alexa.Presentation.APL.UserEvent":
         accion = data["request"]["arguments"][0]
         if not accion:
