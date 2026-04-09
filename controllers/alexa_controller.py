@@ -38,7 +38,10 @@ def manejar_request(data):
     # 🔥 Botones
     if tipo == "Alexa.Presentation.APL.UserEvent":
         accion = data["request"]["arguments"][0]
-        texto = procesar_accion(accion)
+        if not accion:
+            texto = "No entendí a dónde quieres ir"
+        else:
+            texto = procesar_accion(accion)
 
         return jsonify({
             "version": "1.0",
@@ -57,9 +60,10 @@ def manejar_request(data):
 
         if intent == "HablarIntent":
             slots = data["request"]["intent"].get("slots", {})
-            accion = slots.get("accion", {}).get("value")
-
-            texto = procesar_accion(accion)
+            if not accion:
+                texto = "No entendí a dónde quieres ir"
+            else:
+                texto = procesar_accion(accion)
 
             return jsonify({
                 "version": "1.0",
