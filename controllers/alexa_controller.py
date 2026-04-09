@@ -104,6 +104,7 @@ def manejar_request(data):
             "outputSpeech": {
                 "type": "PlainText",
                 "text": "Error"
-            }
+            },
+            "shouldEndSession": False
         }
     })
