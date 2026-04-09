@@ -51,22 +51,53 @@ def manejar_request(data):
             }
         })
 
-    # 🟡 Intent
+    #Intent
     if tipo == "IntentRequest":
         intent = data["request"]["intent"]["name"]
 
         if intent == "HablarIntent":
+            slots = data["request"]["intent"].get("slots", {})
+            accion = slots.get("accion", {}).get("value")
+
+            texto = procesar_accion(accion)
+
             return jsonify({
                 "version": "1.0",
                 "response": {
                     "outputSpeech": {
                         "type": "PlainText",
-                        "text": "Hola mundo"
+                        "text": texto
                     },
                     "shouldEndSession": False
                 }
             })
-
+        #Ayuda
+        if tipo == "AMAZON.HelpIntent":
+            return jsonify({
+                "version": "1.0",
+                "response": {
+                    "outputSpeech": {
+                        "type": "PlainText",
+                        "text": "En esta skill puedes aprender y escuchar música, con solo decir Alexa, vamos a aprender"+
+                            "o Alexa, vamos a escuchar música se activarán las funciones correspondientes"
+                    },
+                    "shouldEndSession": False
+                }
+            })
+        #Salida
+        if tipo == "AMAZON.CancelIntent" or tipo == "AMAZON.StopIntent":
+            return jsonify({
+                "version": "1.0",
+                "response": {
+                    "outputSpeech": {
+                        "type": "PlainText",
+                        "text": "Eso es todo por ahora, cerrando asistente C"
+                    },
+                    "shouldEndSession": True
+                }
+            })
+    
+    #Cada vez que no se entienda la petición
     return jsonify({
         "version": "1.0",
         "response": {
