@@ -72,7 +72,7 @@ def manejar_request(data):
                 }
             })
         #Ayuda
-        if tipo == "AMAZON.HelpIntent":
+        if intent == "AMAZON.HelpIntent":
             return jsonify({
                 "version": "1.0",
                 "response": {
@@ -85,7 +85,7 @@ def manejar_request(data):
                 }
             })
         #Salida
-        if tipo == "AMAZON.CancelIntent" or tipo == "AMAZON.StopIntent":
+        if intent == "AMAZON.CancelIntent" or intent == "AMAZON.StopIntent":
             return jsonify({
                 "version": "1.0",
                 "response": {
