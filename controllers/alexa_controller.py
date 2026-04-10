@@ -60,6 +60,8 @@ def manejar_request(data):
 
         if intent == "HablarIntent":
             slots = data["request"]["intent"].get("slots", {})
+            accion = slots.get("accion", {}).get("value")  # 🔥 ESTA LÍNEA FALTABA
+
             if not accion:
                 texto = "No entendí a dónde quieres ir"
             else:
@@ -68,11 +70,11 @@ def manejar_request(data):
             return jsonify({
                 "version": "1.0",
                 "response": {
-                    "outputSpeech": {
-                        "type": "PlainText",
-                        "text": texto
-                    },
-                    "shouldEndSession": False
+            "outputSpeech": {
+                "type": "PlainText",
+                "text": texto
+            },
+            "shouldEndSession": False
                 }
             })
         # Ayuda
