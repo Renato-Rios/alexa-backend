@@ -47,7 +47,7 @@ def music_gui():
                                             "type": "TouchWrapper",
                                             "onPress": {
                                                 "type": "SendEvent",
-                                                "arguments": ["aprender"]
+                                                "arguments": ["boton1"]
                                             },
                                             "item": {
                                                 "type": "Frame",
