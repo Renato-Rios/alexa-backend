@@ -38,7 +38,7 @@ def learn_gui():
                                             "type": "Text",
                                             "text": "Bienvenido a Aprender",
                                             "fontSize": "60dp",
-                                            "color": "#303030",
+                                            "color": "#1B1B1C",
                                             "marginBottom": "40dp"
                                         },
 

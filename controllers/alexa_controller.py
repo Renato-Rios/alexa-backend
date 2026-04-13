@@ -103,7 +103,7 @@ def manejar_request(data):
                 "response": {
                     "outputSpeech": {
                         "type": "PlainText",
-                        "text": "En esta skill puedes aprender y escuchar música, con solo decir Alexa, vamos a aprender"+
+                        "text": "En esta skill puedes aprender sobre nuestro lenguaje y escuchar música, con solo decir Alexa, vamos a aprender"+
                             "o Alexa, vamos a escuchar música se activarán las funciones correspondientes"
                     },
                     "shouldEndSession": False

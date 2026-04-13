@@ -19,7 +19,7 @@ def music_gui():
                             "type": "Frame",
                             "width": "100%",
                             "height": "100%",
-                            "backgroundColor": "#003049",
+                            "backgroundColor": "#780000",
 
                             "items": [
                                 {
@@ -36,9 +36,9 @@ def music_gui():
                                         # TÍTULO
                                         {
                                             "type": "Text",
-                                            "text": "Bienvenido a Aprender",
+                                            "text": "Bienvenido a Música",
                                             "fontSize": "60dp",
-                                            "color": "#303030",
+                                            "color": "#1B1B1C",
                                             "marginBottom": "40dp"
                                         },
 
@@ -53,7 +53,7 @@ def music_gui():
                                                 "type": "Frame",
                                                 "width": "70%",
                                                 "height": "60dp",
-                                                "backgroundColor": "#005B8D",
+                                                "backgroundColor": "#A50000",
                                                 "borderRadius": "25dp",
                                                 "justifyContent": "center",
                                                 "alignItems": "center",
