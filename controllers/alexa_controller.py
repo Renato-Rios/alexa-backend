@@ -1,5 +1,7 @@
 from flask import jsonify
 from views.apl_templates import pantalla_principal
+from views.learn.home_learn import learn_gui
+from views.music.home_music import music_gui
 from services.alexa_service import procesar_accion
 
 def manejar_request(data):
@@ -40,8 +42,17 @@ def manejar_request(data):
         accion = data["request"]["arguments"][0]
         if not accion:
             texto = "No entendí a dónde quieres ir"
+        elif accion == "aprender":
+            texto = "Entrando a aprender"
+            documento = learn_gui()
+
+        elif accion == "musica":
+            texto = "Entrando a música"
+            documento = music_gui()
+
         else:
-            texto = procesar_accion(accion)
+            texto = "Opción no válida"
+            documento = pantalla_principal()
 
         return jsonify({
             "version": "1.0",
@@ -50,6 +61,14 @@ def manejar_request(data):
                     "type": "PlainText",
                     "text": texto
                 },
+                "directives": [
+                    {
+                    "type": "Alexa.Presentation.APL.RenderDocument",
+                    "token": "cambio",
+                    "document": documento,
+                    "datasources": {}
+                    }
+                ],
                 "shouldEndSession": False
             }
         })
