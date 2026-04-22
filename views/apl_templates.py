@@ -21,16 +21,17 @@ def pantalla_principal():
                                     "direction": "column",
                                     "width": "100%",
                                     "height": "100%",
-                                    "justifyContent": "flex-start",
+                                    "justifyContent": "center",
                                     "alignItems": "center",
-                                    "paddingTop": "40dp",
                                     "items": [
+
                                         {
                                             "type": "Text",
                                             "text": "Asistente C",
-                                            "fontSize": "50dp",
+                                            "fontSize": "55dp",
                                             "color": "#303030",
-                                            "marginBottom": "30dp"
+                                            "fontFamily": "Amazon Ember Display",
+                                            "marginBottom": "50dp"
                                         },
 
                                         {
@@ -49,19 +50,21 @@ def pantalla_principal():
                                                     },
                                                     "item": {
                                                         "type": "Frame",
-                                                        "width": "250dp",
+                                                        "width": "240dp",
                                                         "height": "140dp",
                                                         "backgroundColor": "#003049",
                                                         "borderRadius": "25dp",
                                                         "justifyContent": "center",
                                                         "alignItems": "center",
-                                                        "marginRight": "20dp",
+                                                        "marginRight": "30dp",
                                                         "items": [
                                                             {
                                                                 "type": "Text",
                                                                 "text": "Aprender",
                                                                 "fontSize": "24dp",
-                                                                "color": "#FFFFFF"
+                                                                "color": "#FFFFFF",
+                                                                "fontFamily": "Amazon Ember",
+                                                                "textAlign": "center"
                                                             }
                                                         ]
                                                     }
@@ -75,7 +78,7 @@ def pantalla_principal():
                                                     },
                                                     "item": {
                                                         "type": "Frame",
-                                                        "width": "250dp",
+                                                        "width": "240dp",
                                                         "height": "140dp",
                                                         "backgroundColor": "#780000",
                                                         "borderRadius": "25dp",
@@ -86,7 +89,9 @@ def pantalla_principal():
                                                                 "type": "Text",
                                                                 "text": "Música",
                                                                 "fontSize": "24dp",
-                                                                "color": "#FFFFFF"
+                                                                "color": "#FFFFFF",
+                                                                "fontFamily": "Amazon Ember",
+                                                                "textAlign": "center"
                                                             }
                                                         ]
                                                     }
