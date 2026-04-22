@@ -6,34 +6,27 @@ def pantalla_principal():
             "parameters": ["payload"],
             "items": [
                 {
-                    # 🔹 CONTENEDOR PRINCIPAL (layout)
                     "type": "Container",
                     "width": "100%",
                     "height": "100%",
                     "justifyContent": "center",
                     "alignItems": "center",
-
                     "items": [
                         {
-                            # 🔥 FRAME = FONDO REAL
                             "type": "Frame",
                             "width": "100%",
                             "height": "100%",
                             "backgroundColor": "#FDF0D5",
-
                             "items": [
                                 {
-                                    # 🔹 CONTENIDO CENTRADO
                                     "type": "Container",
                                     "direction": "column",
                                     "width": "100%",
                                     "height": "100%",
                                     "justifyContent": "center",
                                     "alignItems": "center",
-
                                     "items": [
 
-                                        # 🎓 TÍTULO
                                         {
                                             "type": "Text",
                                             "text": "Asistente C",
@@ -42,59 +35,64 @@ def pantalla_principal():
                                             "marginBottom": "40dp"
                                         },
 
-                                        # 📘 BOTÓN APRENDER
                                         {
-                                            "type": "TouchWrapper",
-                                            "onPress": {
-                                                "type": "SendEvent",
-                                                "arguments": ["aprender"]
-                                            },
-                                            "item": {
-                                                "type": "Frame",
-                                                "width": "70%",
-                                                "height": "60dp",
-                                                "backgroundColor": "#003049",
-                                                "borderRadius": "25dp",
-                                                "justifyContent": "center",
-                                                "alignItems": "center",
+                                            "type": "Container",
+                                            "direction": "row",
+                                            "justifyContent": "spaceEvenly",
+                                            "width": "100%",
+                                            "items": [
 
-                                                "items": [
-                                                    {
-                                                        "type": "Text",
-                                                        "text": "Aprender",
-                                                        "fontSize": "30dp",
-                                                        "color": "white"
+                                                {
+                                                    "type": "TouchWrapper",
+                                                    "onPress": {
+                                                        "type": "SendEvent",
+                                                        "arguments": ["aprender"]
+                                                    },
+                                                    "item": {
+                                                        "type": "Frame",
+                                                        "width": "40%",
+                                                        "height": "140dp",
+                                                        "backgroundColor": "#003049",
+                                                        "borderRadius": "25dp",
+                                                        "justifyContent": "center",
+                                                        "alignItems": "center",
+                                                        "items": [
+                                                            {
+                                                                "type": "Text",
+                                                                "text": "Aprender",
+                                                                "fontSize": "26dp",
+                                                                "color": "white"
+                                                            }
+                                                        ]
                                                     }
-                                                ]
-                                            }
-                                        },
+                                                },
 
-                                        # 🎵 BOTÓN MÚSICA
-                                        {
-                                            "type": "TouchWrapper",
-                                            "onPress": {
-                                                "type": "SendEvent",
-                                                "arguments": ["musica"]
-                                            },
-                                            "item": {
-                                                "type": "Frame",
-                                                "width": "70%",
-                                                "height": "60dp",
-                                                "marginTop": "30dp",
-                                                "backgroundColor": "#780000",
-                                                "borderRadius": "25dp",
-                                                "justifyContent": "center",
-                                                "alignItems": "center",
-
-                                                "items": [
-                                                    {
-                                                        "type": "Text",
-                                                        "text": "Música",
-                                                        "fontSize": "30dp",
-                                                        "color": "white"
+                                                {
+                                                    "type": "TouchWrapper",
+                                                    "onPress": {
+                                                        "type": "SendEvent",
+                                                        "arguments": ["musica"]
+                                                    },
+                                                    "item": {
+                                                        "type": "Frame",
+                                                        "width": "40%",
+                                                        "height": "140dp",
+                                                        "backgroundColor": "#780000",
+                                                        "borderRadius": "25dp",
+                                                        "justifyContent": "center",
+                                                        "alignItems": "center",
+                                                        "items": [
+                                                            {
+                                                                "type": "Text",
+                                                                "text": "Música",
+                                                                "fontSize": "26dp",
+                                                                "color": "white"
+                                                            }
+                                                        ]
                                                     }
-                                                ]
-                                            }
+                                                }
+
+                                            ]
                                         }
 
                                     ]
