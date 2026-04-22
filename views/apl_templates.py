@@ -9,8 +9,6 @@ def pantalla_principal():
                     "type": "Container",
                     "width": "100%",
                     "height": "100%",
-                    "justifyContent": "center",
-                    "alignItems": "center",
                     "items": [
                         {
                             "type": "Frame",
@@ -23,22 +21,23 @@ def pantalla_principal():
                                     "direction": "column",
                                     "width": "100%",
                                     "height": "100%",
-                                    "justifyContent": "center",
+                                    "justifyContent": "flex-start",
                                     "alignItems": "center",
+                                    "paddingTop": "40dp",
                                     "items": [
-
                                         {
                                             "type": "Text",
                                             "text": "Asistente C",
-                                            "fontSize": "60dp",
+                                            "fontSize": "50dp",
                                             "color": "#303030",
-                                            "marginBottom": "40dp"
+                                            "marginBottom": "30dp"
                                         },
 
                                         {
                                             "type": "Container",
                                             "direction": "row",
-                                            "justifyContent": "spaceEvenly",
+                                            "justifyContent": "center",
+                                            "alignItems": "center",
                                             "width": "100%",
                                             "items": [
 
@@ -50,18 +49,19 @@ def pantalla_principal():
                                                     },
                                                     "item": {
                                                         "type": "Frame",
-                                                        "width": "40%",
+                                                        "width": "250dp",
                                                         "height": "140dp",
                                                         "backgroundColor": "#003049",
                                                         "borderRadius": "25dp",
                                                         "justifyContent": "center",
                                                         "alignItems": "center",
+                                                        "marginRight": "20dp",
                                                         "items": [
                                                             {
                                                                 "type": "Text",
                                                                 "text": "Aprender",
-                                                                "fontSize": "26dp",
-                                                                "color": "white"
+                                                                "fontSize": "24dp",
+                                                                "color": "#FFFFFF"
                                                             }
                                                         ]
                                                     }
@@ -75,7 +75,7 @@ def pantalla_principal():
                                                     },
                                                     "item": {
                                                         "type": "Frame",
-                                                        "width": "40%",
+                                                        "width": "250dp",
                                                         "height": "140dp",
                                                         "backgroundColor": "#780000",
                                                         "borderRadius": "25dp",
@@ -85,8 +85,8 @@ def pantalla_principal():
                                                             {
                                                                 "type": "Text",
                                                                 "text": "Música",
-                                                                "fontSize": "26dp",
-                                                                "color": "white"
+                                                                "fontSize": "24dp",
+                                                                "color": "#FFFFFF"
                                                             }
                                                         ]
                                                     }
