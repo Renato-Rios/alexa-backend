@@ -30,7 +30,8 @@ def pantalla_principal():
                                             "text": "Asistente C",
                                             "fontSize": "55dp",
                                             "color": "#303030",
-                                            "fontFamily": "Amazon Ember Display",
+                                            "fontFamily": "Amazon Ember",
+                                            "fontWeight": "bold",
                                             "marginBottom": "50dp"
                                         },
 
@@ -64,6 +65,7 @@ def pantalla_principal():
                                                                 "fontSize": "24dp",
                                                                 "color": "#FFFFFF",
                                                                 "fontFamily": "Amazon Ember",
+                                                                "width": "100%",
                                                                 "textAlign": "center"
                                                             }
                                                         ]
@@ -91,6 +93,7 @@ def pantalla_principal():
                                                                 "fontSize": "24dp",
                                                                 "color": "#FFFFFF",
                                                                 "fontFamily": "Amazon Ember",
+                                                                "width": "100%",
                                                                 "textAlign": "center"
                                                             }
                                                         ]
