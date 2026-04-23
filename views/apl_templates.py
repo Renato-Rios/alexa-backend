@@ -55,18 +55,25 @@ def pantalla_principal():
                                                         "height": "140dp",
                                                         "backgroundColor": "#003049",
                                                         "borderRadius": "25dp",
-                                                        "justifyContent": "center",
-                                                        "alignItems": "center",
                                                         "marginRight": "30dp",
                                                         "items": [
                                                             {
-                                                                "type": "Text",
-                                                                "text": "Aprender",
-                                                                "fontSize": "24dp",
-                                                                "color": "#FFFFFF",
-                                                                "fontFamily": "Amazon Ember",
+                                                                "type": "Container",
                                                                 "width": "100%",
-                                                                "textAlign": "center"
+                                                                "height": "100%",
+                                                                "justifyContent": "center",
+                                                                "alignItems": "center",
+                                                                "items": [
+                                                                    {
+                                                                        "type": "Text",
+                                                                        "text": "Aprender",
+                                                                        "fontSize": "24dp",
+                                                                        "color": "#FFFFFF",
+                                                                        "fontFamily": "Amazon Ember",
+                                                                        "width": "100%",
+                                                                        "textAlign": "center"
+                                                                    }
+                                                                ]
                                                             }
                                                         ]
                                                     }
@@ -84,17 +91,24 @@ def pantalla_principal():
                                                         "height": "140dp",
                                                         "backgroundColor": "#780000",
                                                         "borderRadius": "25dp",
-                                                        "justifyContent": "center",
-                                                        "alignItems": "center",
                                                         "items": [
                                                             {
-                                                                "type": "Text",
-                                                                "text": "Música",
-                                                                "fontSize": "24dp",
-                                                                "color": "#FFFFFF",
-                                                                "fontFamily": "Amazon Ember",
+                                                                "type": "Container",
                                                                 "width": "100%",
-                                                                "textAlign": "center"
+                                                                "height": "100%",
+                                                                "justifyContent": "center",
+                                                                "alignItems": "center",
+                                                                "items": [
+                                                                    {
+                                                                        "type": "Text",
+                                                                        "text": "Música",
+                                                                        "fontSize": "24dp",
+                                                                        "color": "#FFFFFF",
+                                                                        "fontFamily": "Amazon Ember",
+                                                                        "width": "100%",
+                                                                        "textAlign": "center"
+                                                                    }
+                                                                ]
                                                             }
                                                         ]
                                                     }
