@@ -41,6 +41,33 @@ def fase_1_gui():
                                             "color": "#1B1B1C",
                                             "marginBottom": "40dp"
                                         },
+                                        #imagen
+                                        {
+                                            "type": "Image",
+                                            "source": "${payload.image}",
+                                            "width": "300dp",
+                                            "height": "300dp",
+                                            "scale": "best-fill",
+                                            "marginBottom": "30dp"
+                                        },
+                                        #palabra
+                                        {
+                                            "type": "Text",
+                                            "text": "${payload.word}",
+                                            "fontSize": "50dp",
+                                            "color": "#FFFFFF",
+                                            "textAlign": "center"
+                                        },
+                                        
+                                        #fonetica
+                                        {
+                                            "type": "Text",
+                                            "text": "${payload.phonetic}",
+                                            "fontSize": "30dp",
+                                            "color": "#CCCCCC",
+                                            "marginTop": "20dp",
+                                            "textAlign": "center"
+                                        }
                                         
                                     ]
                                 }

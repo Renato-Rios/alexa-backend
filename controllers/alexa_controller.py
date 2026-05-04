@@ -4,7 +4,40 @@ from views.learn.home_learn import learn_gui
 from views.learn.fase_1 import fase_1_gui
 from views.music.home_music import music_gui
 from services.alexa_service import procesar_accion
+import psycopg2
 
+def get_learning_content():
+    conn = psycopg2.connect(
+        host="dpg-d7klgul7vvec73cebok0-a.oregon-postgres.render.com",
+        database="asistentec",
+        user="admin",
+        password="HGjBPcY5YLIWaVtBNzWsvtmns6NAO8fN",
+        port=5432
+    )
+
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT w.word, w.phonetic, i.url
+        FROM words w
+        JOIN images i ON w.id = i.word_id
+        WHERE i.patient_id = 1
+        LIMIT 1;
+    """)
+
+    result = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    if result:
+        return {
+            "word": result[0],
+            "phonetic": result[1],
+            "image": result[2]
+        }
+    else:
+        return None
 
 def manejar_request(data):
     interfaces = data["context"]["System"]["device"]["supportedInterfaces"]
@@ -52,8 +85,23 @@ def manejar_request(data):
             texto = "Entrando a música"
             documento = music_gui()
         elif accion == "fase1":
-            texto = "Entrando a fase 1"
-            documento = fase_1_gui()
+            contenido = get_learning_content()
+            
+            if contenido:
+                texto = f"La palabra es {contenido['word']}"
+                documento = fase_1_gui()
+                
+                datasources = {
+                    "payload": {
+                        "word": contenido['word'],
+                        "image": contenido['image'],
+                        "phonetic": contenido['phonetic']
+                    }
+                }
+            else:
+                texto = "No encontré contenido"
+                documento = learn_gui()
+                datasources = {}
         else:
             texto = "Opción no válida"
             documento = pantalla_principal()
