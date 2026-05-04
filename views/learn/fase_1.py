@@ -1,4 +1,4 @@
-def learn_gui():
+def fase_1_gui():
     return {
         "type": "APL",
         "version": "1.7",

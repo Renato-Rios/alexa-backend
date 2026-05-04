@@ -47,7 +47,7 @@ def learn_gui():
                                             "type": "TouchWrapper",
                                             "onPress": {
                                                 "type": "SendEvent",
-                                                "arguments": ["boton1"]
+                                                "arguments": ["fase1"]
                                             },
                                             "item": {
                                                 "type": "Frame",

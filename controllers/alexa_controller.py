@@ -49,7 +49,9 @@ def manejar_request(data):
         elif accion == "musica":
             texto = "Entrando a música"
             documento = music_gui()
-
+        elif accion == "fase1":
+            texto = "Entrando a fase 1"
+            documento = fase_1_gui()
         else:
             texto = "Opción no válida"
             documento = pantalla_principal()
