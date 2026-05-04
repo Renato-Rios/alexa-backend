@@ -1,8 +1,10 @@
 from flask import jsonify
 from views.apl_templates import pantalla_principal
 from views.learn.home_learn import learn_gui
+from views.learn.fase_1 import fase_1_gui
 from views.music.home_music import music_gui
 from services.alexa_service import procesar_accion
+
 
 def manejar_request(data):
     interfaces = data["context"]["System"]["device"]["supportedInterfaces"]
