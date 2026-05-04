@@ -30,17 +30,7 @@ def fase_1_gui():
                                     "height": "100%",
                                     "justifyContent": "center",
                                     "alignItems": "center",
-
                                     "items": [
-
-                                        # TÍTULO
-                                        {
-                                            "type": "Text",
-                                            "text": "Fase 1",
-                                            "fontSize": "60dp",
-                                            "color": "#1B1B1C",
-                                            "marginBottom": "40dp"
-                                        },
                                         #imagen
                                         {
                                             "type": "Image",
