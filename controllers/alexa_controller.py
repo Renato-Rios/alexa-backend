@@ -42,7 +42,7 @@ def get_learning_content():
 def manejar_request(data):
     interfaces = data["context"]["System"]["device"]["supportedInterfaces"]
     tiene_apl = "Alexa.Presentation.APL" in interfaces
-
+    datasources = {}
     tipo = data["request"]["type"]
 
     if tipo == "LaunchRequest":
