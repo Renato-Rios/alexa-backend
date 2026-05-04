@@ -5,7 +5,7 @@ from views.learn.fase_1 import fase_1_gui
 from views.music.home_music import music_gui
 from services.alexa_service import procesar_accion
 import psycopg2
- 
+
 def get_learning_content():
     conn = psycopg2.connect(
         host="dpg-d7klgul7vvec73cebok0-a.oregon-postgres.render.com",
@@ -118,7 +118,7 @@ def manejar_request(data):
                     "type": "Alexa.Presentation.APL.RenderDocument",
                     "token": "cambio",
                     "document": documento,
-                    "datasources": {}
+                    "datasources": datasources
                     }
                 ],
                 "shouldEndSession": False
