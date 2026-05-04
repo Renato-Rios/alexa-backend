@@ -64,7 +64,7 @@ def manejar_request(data):
                         "document": pantalla_principal(),
 
                         # 🔥 AGREGA ESTO (IMPORTANTE)
-                        "datasources": {}
+                        "datasources": datasources
                     }
                 ],
 
