@@ -6,24 +6,17 @@ def fase_1_gui():
             "parameters": ["payload"],
             "items": [
                 {
-                    # CONTENEDOR PRINCIPAL (layout)
                     "type": "Container",
                     "width": "100%",
                     "height": "100%",
-                    "justifyContent": "center",
-                    "alignItems": "center",
-                    
                     "items": [
                         {
-                            # FRAME = FONDO REAL
                             "type": "Frame",
                             "width": "100%",
                             "height": "100%",
                             "backgroundColor": "#003049",
-
                             "items": [
                                 {
-                                    # CONTENIDO CENTRADO
                                     "type": "Container",
                                     "direction": "column",
                                     "width": "100%",
@@ -31,34 +24,32 @@ def fase_1_gui():
                                     "justifyContent": "center",
                                     "alignItems": "center",
                                     "items": [
-                                        #imagen
                                         {
                                             "type": "Image",
-                                            "source": "${payload.image}",
-                                            "width": "300dp",
-                                            "height": "300dp",
-                                            "scale": "best-fill",
-                                            "marginBottom": "30dp"
+                                            "source": "${payload.datosFase.image}",
+                                            "width": "350dp",
+                                            "height": "350dp",
+                                            "scale": "best-fit",
+                                            "align": "center",
+                                            "marginBottom": "20dp"
                                         },
-                                        #palabra
                                         {
                                             "type": "Text",
-                                            "text": "${payload.word}",
-                                            "fontSize": "50dp",
+                                            "text": "${payload.datosFase.word}",
+                                            "fontSize": "60dp",
+                                            "fontWeight": "700",
                                             "color": "#FFFFFF",
                                             "textAlign": "center"
                                         },
-                                        
-                                        #fonetica
                                         {
                                             "type": "Text",
-                                            "text": "${payload.phonetic}",
-                                            "fontSize": "30dp",
+                                            "text": "${payload.datosFase.phonetic}",
+                                            "fontSize": "35dp",
                                             "color": "#CCCCCC",
-                                            "marginTop": "20dp",
-                                            "textAlign": "center"
+                                            "marginTop": "10dp",
+                                            "textAlign": "center",
+                                            "fontStyle": "italic"
                                         }
-                                        
                                     ]
                                 }
                             ]

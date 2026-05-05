@@ -59,12 +59,8 @@ def manejar_request(data):
                     {
                         "type": "Alexa.Presentation.APL.RenderDocument",
                         "token": "main",
-
-                        # 🔥 ESTA LÍNEA FALTABA
                         "document": pantalla_principal(),
-
-                        # 🔥 AGREGA ESTO (IMPORTANTE)
-                        "datasources": datasources
+                        "datasources": {}
                     }
                 ],
 
@@ -92,7 +88,8 @@ def manejar_request(data):
                 documento = fase_1_gui()
                 
                 datasources = {
-                    "payload": {
+                    "datosFase": {
+                        "type": "object",
                         "word": contenido['word'],
                         "image": contenido['image'],
                         "phonetic": contenido['phonetic']
