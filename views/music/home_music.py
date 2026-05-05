@@ -6,13 +6,12 @@ def music_gui():
             "parameters": ["payload"],
             "items": [
                 {
-                    # CONTENEDOR PRINCIPAL
                     "type": "Container",
                     "width": "100%",
                     "height": "100%",
                     "items": [
                         {
-                            # FONDO CORRECTO
+                            # FONDO
                             "type": "Frame",
                             "width": "100%",
                             "height": "100%",
@@ -30,7 +29,7 @@ def music_gui():
 
                                     "items": [
                                         {
-                                            # CONTENEDOR GENERAL (AQUÍ ESTABA EL ERROR)
+                                            # CONTENEDOR GENERAL
                                             "type": "Container",
                                             "direction": "column",
                                             "width": "100%",
@@ -40,7 +39,6 @@ def music_gui():
 
                                             "items": [
 
-                                                # ESPACIO ARRIBA
                                                 {"type": "Container", "height": "40dp"},
 
                                                 # TITULO
@@ -52,6 +50,7 @@ def music_gui():
                                                     "borderRadius": "40dp",
                                                     "justifyContent": "center",
                                                     "alignItems": "center",
+                                                    "alignSelf": "center",
                                                     "items": [
                                                         {
                                                             "type": "Text",
@@ -59,7 +58,8 @@ def music_gui():
                                                             "fontSize": "24dp",
                                                             "color": "#000000",
                                                             "textAlign": "center",
-                                                            "width": "90%"
+                                                            "fontWeight": "bold",
+                                                            "width": "100%"
                                                         }
                                                     ]
                                                 },
@@ -75,16 +75,9 @@ def music_gui():
                                                     "alignItems": "center",
 
                                                     "items": [
-
-                                                        # 🔴 DISCO 1
                                                         disco("playlist_mama", "PLAYLIST MAMÁ"),
-
-                                                        # 🔴 DISCO 2
                                                         disco("playlist_renato", "PLAYLIST RENATO"),
-
-                                                        # 🔴 DISCO 3
                                                         disco("playlist_oliver", "PLAYLIST OLIVER")
-
                                                     ]
                                                 }
                                             ]
@@ -100,12 +93,12 @@ def music_gui():
     }
 
 
-# 🔧 FUNCIÓN PARA EVITAR REPETIR CÓDIGO
 def disco(evento, texto):
     return {
         "type": "Container",
         "direction": "column",
         "alignItems": "center",
+        "justifyContent": "center",
 
         "items": [
 
@@ -120,7 +113,7 @@ def disco(evento, texto):
                 "alignItems": "center",
 
                 "items": [
-                    # ARO INTERNO
+                    # CÍRCULO NEGRO
                     {
                         "type": "Frame",
                         "width": "80dp",
@@ -131,7 +124,7 @@ def disco(evento, texto):
                         "alignItems": "center",
 
                         "items": [
-                            # CENTRO
+                            # CENTRO BLANCO
                             {
                                 "type": "Frame",
                                 "width": "20dp",
@@ -168,6 +161,7 @@ def disco(evento, texto):
                             "fontSize": "18dp",
                             "color": "#0E5678",
                             "textAlign": "center",
+                            "fontWeight": "bold",
                             "width": "100%"
                         }
                     ]
