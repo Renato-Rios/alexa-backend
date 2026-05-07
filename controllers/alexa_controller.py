@@ -40,13 +40,12 @@ def get_learning_content():
         return None
 
 def manejar_request(data):
-    interfaces = data["context"]["System"]["device"]["supportedInterfaces"]
-    tiene_apl = "Alexa.Presentation.APL" in interfaces
-    datasources = {}
+    # Extraer información básica
     tipo = data["request"]["type"]
+    datasources = {}
 
+    # Caso 1: Inicio de la Skill
     if tipo == "LaunchRequest":
-
         return jsonify({
             "version": "1.0",
             "response": {
@@ -54,39 +53,37 @@ def manejar_request(data):
                     "type": "PlainText",
                     "text": "Estamos en Asistente C"
                 },
-
-                "directives": [
-                    {
-                        "type": "Alexa.Presentation.APL.RenderDocument",
-                        "token": "main",
-                        "document": pantalla_principal(),
-                        "datasources": {}
-                    }
-                ],
-
+                "directives": [{
+                    "type": "Alexa.Presentation.APL.RenderDocument",
+                    "token": "main_token",
+                    "document": pantalla_principal(),
+                    "datasources": {}
+                }],
                 "shouldEndSession": False
             }
         })
 
-    # Botones
+    # Caso 2: Interacción con botones (UserEvent)
     if tipo == "Alexa.Presentation.APL.UserEvent":
-        accion = data["request"]["arguments"][0]
-        if not accion:
-            texto = "No entendí a dónde quieres ir"
-        elif accion == "aprender":
+        argumentos = data["request"].get("arguments", [])
+        accion = argumentos[0] if argumentos else None
+        
+        documento = pantalla_principal() # Default
+        texto = "Cargando selección"
+
+        if accion == "aprender":
             texto = "Entrando a aprender"
             documento = learn_gui()
-
+            
         elif accion == "musica":
             texto = "Entrando a música"
             documento = music_gui()
+            
         elif accion == "fase1":
             contenido = get_learning_content()
-            
             if contenido:
                 texto = f"La palabra es {contenido['word']}"
                 documento = fase_1_gui()
-                
                 datasources = {
                     "datosFase": {
                         "type": "object",
@@ -96,12 +93,8 @@ def manejar_request(data):
                     }
                 }
             else:
-                texto = "No encontré contenido"
+                texto = "No encontré contenido en la base de datos"
                 documento = learn_gui()
-                datasources = {}
-        else:
-            texto = "Opción no válida"
-            documento = pantalla_principal()
 
         return jsonify({
             "version": "1.0",
@@ -110,42 +103,36 @@ def manejar_request(data):
                     "type": "PlainText",
                     "text": texto
                 },
-                "directives": [
-                    {
+                "directives": [{
                     "type": "Alexa.Presentation.APL.RenderDocument",
-                    "token": "cambio",
+                    "token": "fase_token",
                     "document": documento,
                     "datasources": datasources
-                    }
-                ],
+                }],
                 "shouldEndSession": False
             }
         })
 
-    #Intent
+    # Caso 3: Comandos de voz (IntentRequest)
     if tipo == "IntentRequest":
         intent = data["request"]["intent"]["name"]
-
+        
         if intent == "HablarIntent":
             slots = data["request"]["intent"].get("slots", {})
-            accion = slots.get("accion", {}).get("value")  # 🔥 ESTA LÍNEA FALTABA
-
-            if not accion:
-                texto = "No entendí a dónde quieres ir"
-            else:
-                texto = procesar_accion(accion)
-
+            accion = slots.get("accion", {}).get("value")
+            texto = procesar_accion(accion) if accion else "No entendí a dónde quieres ir"
+            
             return jsonify({
                 "version": "1.0",
                 "response": {
-            "outputSpeech": {
-                "type": "PlainText",
-                "text": texto
-            },
-            "shouldEndSession": False
+                    "outputSpeech": {"type": "PlainText", "text": texto},
+                    "shouldEndSession": False
                 }
             })
-        # Ayuda
+
+        # ... (Help, Cancel, Stop intents igual que antes)
+        
+    # Ayuda
         if intent == "AMAZON.HelpIntent":
             return jsonify({
                 "version": "1.0",
@@ -170,15 +157,153 @@ def manejar_request(data):
                     "shouldEndSession": True
                 }
             })
-    
-    #Cada vez que no se entienda la petición
+
     return jsonify({
         "version": "1.0",
         "response": {
-            "outputSpeech": {
-                "type": "PlainText",
-                "text": "Error"
-            },
+            "outputSpeech": {"type": "PlainText", "text": "Lo siento, hubo un error"},
             "shouldEndSession": False
         }
     })
+    
+# def manejar_request(data):
+#     datasources = {}
+#     tipo = data["request"]["type"]
+
+#     if tipo == "LaunchRequest":
+
+#         return jsonify({
+#             "version": "1.0",
+#             "response": {
+#                 "outputSpeech": {
+#                     "type": "PlainText",
+#                     "text": "Estamos en Asistente C"
+#                 },
+
+#                 "directives": [
+#                     {
+#                         "type": "Alexa.Presentation.APL.RenderDocument",
+#                         "token": "main",
+#                         "document": pantalla_principal(),
+#                         "datasources": {}
+#                     }
+#                 ],
+
+#                 "shouldEndSession": False
+#             }
+#         })
+
+#     # Botones
+#     if tipo == "Alexa.Presentation.APL.UserEvent":
+#         accion = data["request"]["arguments"][0]
+#         if not accion:
+#             texto = "No entendí a dónde quieres ir"
+#         elif accion == "aprender":
+#             texto = "Entrando a aprender"
+#             documento = learn_gui()
+
+#         elif accion == "musica":
+#             texto = "Entrando a música"
+#             documento = music_gui()
+#         elif accion == "fase1":
+#             contenido = get_learning_content()
+            
+#             if contenido:
+#                 texto = f"La palabra es {contenido['word']}"
+#                 documento = fase_1_gui()
+                
+#                 datasources = {
+#                     "datosFase": {
+#                         "type": "object",
+#                         "word": contenido['word'],
+#                         "image": contenido['image'],
+#                         "phonetic": contenido['phonetic']
+#                     }
+#                 }
+#             else:
+#                 texto = "No encontré contenido"
+#                 documento = learn_gui()
+#                 datasources = {}
+#         else:
+#             texto = "Opción no válida"
+#             documento = pantalla_principal()
+
+#         return jsonify({
+#             "version": "1.0",
+#             "response": {
+#                 "outputSpeech": {
+#                     "type": "PlainText",
+#                     "text": texto
+#                 },
+#                 "directives": [
+#                     {
+#                     "type": "Alexa.Presentation.APL.RenderDocument",
+#                     "token": "cambio",
+#                     "document": documento,
+#                     "datasources": datasources
+#                     }
+#                 ],
+#                 "shouldEndSession": False
+#             }
+#         })
+
+#     #Intent
+#     if tipo == "IntentRequest":
+#         intent = data["request"]["intent"]["name"]
+
+#         if intent == "HablarIntent":
+#             slots = data["request"]["intent"].get("slots", {})
+#             accion = slots.get("accion", {}).get("value")  # 🔥 ESTA LÍNEA FALTABA
+
+#             if not accion:
+#                 texto = "No entendí a dónde quieres ir"
+#             else:
+#                 texto = procesar_accion(accion)
+
+#             return jsonify({
+#                 "version": "1.0",
+#                 "response": {
+#             "outputSpeech": {
+#                 "type": "PlainText",
+#                 "text": texto
+#             },
+#             "shouldEndSession": False
+#                 }
+#             })
+#         # Ayuda
+#         if intent == "AMAZON.HelpIntent":
+#             return jsonify({
+#                 "version": "1.0",
+#                 "response": {
+#                     "outputSpeech": {
+#                         "type": "PlainText",
+#                         "text": "En esta skill puedes aprender sobre nuestro lenguaje y escuchar música, con solo decir Alexa, vamos a aprender"+
+#                             "o Alexa, vamos a escuchar música se activarán las funciones correspondientes"
+#                     },
+#                     "shouldEndSession": False
+#                 }
+#             })
+#         #Salida
+#         if intent == "AMAZON.CancelIntent" or intent == "AMAZON.StopIntent":
+#             return jsonify({
+#                 "version": "1.0",
+#                 "response": {
+#                     "outputSpeech": {
+#                         "type": "PlainText",
+#                         "text": "Eso es todo por ahora, cerrando asistente C"
+#                     },
+#                     "shouldEndSession": True
+#                 }
+#             })
+    
+#     #Cada vez que no se entienda la petición
+#     return jsonify({
+#         "version": "1.0",
+#         "response": {
+#             "outputSpeech": {
+#                 "type": "PlainText",
+#                 "text": "Error"
+#             },
+#             "shouldEndSession": False
+#         }
+#     })
