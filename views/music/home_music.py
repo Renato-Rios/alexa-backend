@@ -2,69 +2,72 @@ def music_gui():
     return {
         "type": "APL",
         "version": "1.7",
+        "import": [
+            {
+                "name": "alexa-layouts",
+                "version": "1.5.0"
+            }
+        ],
         "mainTemplate": {
             "parameters": ["payload"],
             "items": [
                 {
-                    # 1. CONTENEDOR RAIZ: Ocupa toda la pantalla y centra el marco
+                    # Cambiamos Frame por Container para poder usar aligment de Flexbox
                     "type": "Container",
-                    "width": "100vw",
-                    "height": "100vh",
-                    "backgroundColor": "#710014",
-                    "alignItems": "center",
-                    "justifyContent": "center",
+                    "width": "100%",
+                    "height": "100%",
+                    "backgroundColor": "#710014", # Rojo oscuro de fondo
+                    "justifyContent": "center",   # Centra el recuadro blanco verticalmente
+                    "alignItems": "center",       # Centra el recuadro blanco horizontalmente
                     "items": [
                         {
-                            # 2. EL MARCO BLANCO: Centra todo su contenido internamente
                             "type": "Frame",
-                            "width": "90%",
-                            "height": "85%",
-                            "borderWidth": "3dp",
+                            "width": "95%",
+                            "height": "90%",
+                            "borderWidth": "2dp",
                             "borderColor": "#FFFFFF",
+                            "backgroundColor": "transparent",
                             "item": {
                                 "type": "Container",
+                                "direction": "column",
                                 "width": "100%",
                                 "height": "100%",
-                                "direction": "column",
+                                "justifyContent": "center", # Centra el contenido interior verticalmente
                                 "alignItems": "center",
-                                "justifyContent": "center", # Centrado vertical absoluto
                                 "items": [
-                                    # 3. TITULO: Centrado arriba con margen fijo
+                                    # TÍTULO SUPERIOR
                                     {
                                         "type": "Frame",
-                                        "width": "75%",
-                                        "height": "75dp",
-                                        "backgroundColor": "#E6E6E6",
-                                        "borderRadius": "37.5dp",
-                                        "justifyContent": "center",
-                                        "alignItems": "center",
-                                        "marginTop": "20dp",   # Margen superior para equilibrio
-                                        "marginBottom": "auto", # Empuja los discos hacia el centro
+                                        "width": "60%",
+                                        "height": "60dp",
+                                        "backgroundColor": "#F0F0F0",
+                                        "borderRadius": "30dp",
+                                        "marginBottom": "40dp", # Separación con los discos
                                         "item": {
                                             "type": "Text",
-                                            "text": "CALMA TU ALMA con un poco de música".upper(),
-                                            "fontSize": "24dp",
+                                            "text": "CALMA TU ALMA CON UN POCO DE MÚSICA",
+                                            "fontSize": "22dp",
                                             "color": "#000000",
                                             "textAlign": "center",
-                                            "fontWeight": "bold"
+                                            "textAlignVertical": "center",
+                                            "fontWeight": "bold",
+                                            "width": "100%",
+                                            "height": "100%"
                                         }
                                     },
-                                    # 4. FILA DE DISCOS: Distribución simétrica
+                                    # CONTENEDOR DE DISCOS (CENTRADOS)
                                     {
                                         "type": "Container",
                                         "direction": "row",
                                         "width": "100%",
-                                        "grow": 1,              # Toma el espacio central
-                                        "justifyContent": "space-around", # Centrado horizontal absoluto de los 3
+                                        "justifyContent": "space-evenly",
                                         "alignItems": "center",
                                         "items": [
                                             disco("playlist_mama", "PLAYLIST MAMÁ"),
                                             disco("playlist_renato", "PLAYLIST RENATO"),
                                             disco("playlist_oliver", "PLAYLIST OLIVER")
                                         ]
-                                    },
-                                    # Espaciador inferior invisible para forzar el centro real
-                                    {"type": "Container", "height": "20dp"}
+                                    }
                                 ]
                             }
                         }
@@ -74,45 +77,75 @@ def music_gui():
         }
     }
 
-
 def disco(evento, texto):
+    # Definimos el tamaño del disco base para calcular los centros
+    ancho_disco = 180
+    alto_disco = 180
+
     return {
         "type": "Container",
         "direction": "column",
         "alignItems": "center",
-        "justifyContent": "center",
+        "width": "220dp",
         "items": [
-            # EL DISCO (Círculos concéntricos)
             {
-                "type": "Frame",
-                "width": "160dp",
-                "height": "160dp",
-                "backgroundColor": "#E6E6E6",
-                "borderRadius": "80dp",
-                "justifyContent": "center",
-                "alignItems": "center",
+                "type": "Container",
+                "width": "200dp",
+                "height": "200dp",
                 "items": [
+                    # DISCO BLANCO (BASE) - Posicionado para dar aire
                     {
                         "type": "Frame",
-                        "width": "80dp",
-                        "height": "80dp",
-                        "backgroundColor": "#000000",
-                        "borderRadius": "40dp",
-                        "justifyContent": "center",
-                        "alignItems": "center",
+                        "width": f"{ancho_disco}dp",
+                        "height": f"{alto_disco}dp",
+                        "backgroundColor": "#F5F5F0",
+                        "borderRadius": f"{ancho_disco // 2}dp",
+                        "borderWidth": "2dp",
+                        "borderColor": "#000000",
+                        "alignSelf": "center",
+                        "top": "10dp", # Pequeño aire arriba
                         "items": [
+                            # 🔷 FORZAMOS EL CENTRADO DE LOS CÍRCULOS INTERNOS CON POSICIÓN ABSOLUTA
+
+                            # CÍRCULO NEGRO MEDIANO
+                            {
+                                "type": "Frame",
+                                "width": "70dp",
+                                "height": "70dp",
+                                "backgroundColor": "#1A1A1A",
+                                "borderRadius": "35dp",
+                                "position": "absolute",
+                                # Calculamos el centro: (Padre/2) - (Hijo/2)
+                                "left": f"{(ancho_disco // 2) - 35}dp",
+                                "top": f"{(alto_disco // 2) - 35}dp"
+                            },
+                            # PUNTO BLANCO CENTRAL PEQUEÑO
                             {
                                 "type": "Frame",
                                 "width": "20dp",
                                 "height": "20dp",
-                                "backgroundColor": "#E6E6E6",
-                                "borderRadius": "10dp"
+                                "backgroundColor": "#F5F5F0",
+                                "borderRadius": "10dp",
+                                "position": "absolute",
+                                # Calculamos el centro: (Padre/2) - (Hijo/2)
+                                "left": f"{(ancho_disco // 2) - 10}dp",
+                                "top": f"{(alto_disco // 2) - 10}dp"
                             }
                         ]
+                    },
+                    # NOTA MUSICAL
+                    {
+                        "type": "Text",
+                        "text": "♫",
+                        "fontSize": "40dp",
+                        "color": "#000000",
+                        "position": "absolute",
+                        "right": "15dp",
+                        "top": "0dp"
                     }
                 ]
             },
-            # EL BOTÓN
+            # BOTÓN (Se mantiene igual, centrado abajo)
             {
                 "type": "TouchWrapper",
                 "onPress": {
@@ -121,21 +154,21 @@ def disco(evento, texto):
                 },
                 "item": {
                     "type": "Frame",
-                    "width": "160dp",
+                    "width": "180dp",
                     "height": "50dp",
-                    "backgroundColor": "#CFE3E8",
+                    "backgroundColor": "#D6EAF8",
                     "borderRadius": "25dp",
                     "marginTop": "20dp",
-                    "justifyContent": "center",
-                    "alignItems": "center",
                     "item": {
                         "type": "Text",
                         "text": texto,
-                        "fontSize": "15dp",
-                        "color": "#0E5678",
-                        "textAlign": "center",
+                        "fontSize": "14dp",
+                        "color": "#005073",
                         "fontWeight": "bold",
-                        "width": "100%"
+                        "textAlign": "center",
+                        "textAlignVertical": "center",
+                        "width": "100%",
+                        "height": "100%"
                     }
                 }
             }
