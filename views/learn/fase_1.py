@@ -9,7 +9,7 @@ def fase_1_gui():
                     "type": "Frame",
                     "width": "100%",
                     "height": "100%",
-                    "backgroundColor": "#003049",
+                    "backgroundColor": "#147AB0",
                     "item": {
                         "type": "Container",
                         "width": "100%",
@@ -65,7 +65,7 @@ def fase_1_gui():
                                         },
                                         "item": {
                                             "type": "Frame",
-                                            "backgroundColor": "#D62828",
+                                            "backgroundColor": "#16BA00",
                                             "borderRadius": "10dp",
                                             "padding": "15dp",
                                             "item": {
@@ -85,7 +85,7 @@ def fase_1_gui():
                                         },
                                         "item": {
                                             "type": "Frame",
-                                            "backgroundColor": "#F77F00",
+                                            "backgroundColor": "#3400B8",
                                             "borderRadius": "10dp",
                                             "padding": "15dp",
                                             "item": {
