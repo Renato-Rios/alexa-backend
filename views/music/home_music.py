@@ -71,60 +71,63 @@ def music_gui():
             ]
         }
     }
+
 def disco(evento, texto):
     return {
         "type": "Container",
         "direction": "column",
         "alignItems": "center",
-        "width": "220dp", # Fijamos el ancho de toda la columna del disco
+        "width": "220dp",
         "items": [
-            # CONTENEDOR DEL DISCO + NOTA
             {
                 "type": "Container",
-                "width": "200dp", # Mismo ancho que el disco
+                "width": "200dp",
                 "height": "200dp",
                 "items": [
-                    # EL VINILO
+                    # DISCO BLANCO (BASE)
                     {
                         "type": "Frame",
-                        "width": "200dp",
-                        "height": "200dp",
+                        "width": "180dp", # Un poco más pequeño para dar aire
+                        "height": "180dp",
                         "backgroundColor": "#F5F5F0",
-                        "borderRadius": "100dp",
-                        "borderWidth": "3dp",
+                        "borderRadius": "90dp",
+                        "borderWidth": "2dp",
                         "borderColor": "#000000",
+                        "alignSelf": "center",
+                        "justifyContent": "center", # CENTRA EL HIJO NEGRO
+                        "alignItems": "center",     # CENTRA EL HIJO NEGRO
                         "item": {
+                            # CÍRCULO NEGRO
                             "type": "Frame",
-                            "width": "80dp",
-                            "height": "80dp",
+                            "width": "70dp",
+                            "height": "70dp",
                             "backgroundColor": "#1A1A1A",
-                            "borderRadius": "40dp",
-                            "alignSelf": "center", # Asegura centrado dentro del disco
-                            "top": "60dp",        # Posicionamiento manual del centro
+                            "borderRadius": "35dp",
+                            "justifyContent": "center", # CENTRA EL HIJO BLANCO
+                            "alignItems": "center",     # CENTRA EL HIJO BLANCO
                             "item": {
+                                # PUNTO BLANCO CENTRAL
                                 "type": "Frame",
-                                "width": "25dp",
-                                "height": "25dp",
+                                "width": "20dp",
+                                "height": "20dp",
                                 "backgroundColor": "#F5F5F0",
-                                "borderRadius": "12dp",
-                                "alignSelf": "center",
-                                "top": "27dp"
+                                "borderRadius": "10dp"
                             }
                         }
                     },
-                    # LA NOTA MUSICAL (Ajustada para no descuadrar)
+                    # NOTA MUSICAL
                     {
                         "type": "Text",
                         "text": "♫",
-                        "fontSize": "50dp",
+                        "fontSize": "40dp",
                         "color": "#000000",
                         "position": "absolute",
-                        "right": "10dp", # Un poco hacia adentro para evitar recortes
-                        "top": "-10dp"
+                        "right": "15dp",
+                        "top": "0dp"
                     }
                 ]
             },
-            # BOTÓN (Ahora se alineará perfectamente abajo del disco)
+            # BOTÓN
             {
                 "type": "TouchWrapper",
                 "onPress": {
@@ -137,11 +140,11 @@ def disco(evento, texto):
                     "height": "50dp",
                     "backgroundColor": "#D6EAF8",
                     "borderRadius": "25dp",
-                    "marginTop": "30dp",
+                    "marginTop": "20dp",
                     "item": {
                         "type": "Text",
                         "text": texto,
-                        "fontSize": "16dp",
+                        "fontSize": "14dp",
                         "color": "#005073",
                         "fontWeight": "bold",
                         "textAlign": "center",
