@@ -2,145 +2,116 @@ def music_gui():
     return {
         "type": "APL",
         "version": "1.7",
-        "import": [
-            {
-                "name": "alexa-layouts",
-                "version": "1.5.0"
-            }
-        ],
         "mainTemplate": {
             "parameters": ["payload"],
             "items": [
                 {
-                    "type": "Frame",
-                    "width": "100%",
-                    "height": "100%",
-                    "backgroundColor": "#710014", # Rojo oscuro de fondo
-                    "item": {
-                        "type": "Frame",
-                        "width": "95%",
-                        "height": "90%",
-                        "alignSelf": "center",
-                        "borderWidth": "2dp",
-                        "borderColor": "#FFFFFF",
-                        "item": {
-                            "type": "Container",
-                            "direction": "column",
-                            "width": "100%",
-                            "height": "100%",
-                            "alignItems": "center",
-                            "items": [
-                                {"type": "Container", "height": "40dp"},
-                                # TÍTULO SUPERIOR
-                                {
-                                    "type": "Frame",
-                                    "width": "60%",
-                                    "height": "60dp",
-                                    "backgroundColor": "#F0F0F0",
-                                    "borderRadius": "30dp",
-                                    "item": {
-                                        "type": "Text",
-                                        "text": "CALMA TU ALMA CON UN POCO DE MÚSICA",
-                                        "fontSize": "22dp",
-                                        "color": "#000000",
-                                        "textAlign": "center",
-                                        "textAlignVertical": "center",
-                                        "fontWeight": "bold",
+                    "type": "Container",
+                    "width": "100vw",
+                    "height": "100vh",
+                    "backgroundColor": "#710014",
+                    "alignItems": "center",       # Centra horizontalmente todo el bloque
+                    "justifyContent": "center",    # Centra verticalmente todo el bloque
+                    "items": [
+                        {
+                            # MARCO / BORDE BLANCO
+                            "type": "Frame",
+                            "width": "90%",
+                            "height": "85%",
+                            "borderWidth": "3dp",
+                            "borderColor": "#FFFFFF",
+                            "item": {
+                                # CONTENEDOR DE CONTENIDO (Dentro del borde)
+                                "type": "Container",
+                                "width": "100%",
+                                "height": "100%",
+                                "direction": "column",
+                                "alignItems": "center",
+                                "justifyContent": "center", # <--- Centrado absoluto vertical
+                                "items": [
+                                    # TITULO
+                                    {
+                                        "type": "Frame",
+                                        "width": "75%",
+                                        "height": "75dp",
+                                        "backgroundColor": "#E6E6E6",
+                                        "borderRadius": "37.5dp",
+                                        "justifyContent": "center",
+                                        "alignItems": "center",
+                                        "marginBottom": "50dp", # Espacio debajo del título
+                                        "item": {
+                                            "type": "Text",
+                                            "text": "CALMA TU ALMA CON UN POCO DE MÚSICA",
+                                            "fontSize": "26dp", # Un poco más grande para mejor lectura
+                                            "color": "#000000",
+                                            "textAlign": "center",
+                                            "fontWeight": "bold"
+                                        }
+                                    },
+                                    # FILA DE DISCOS (Aquí es donde estaba el problema)
+                                    {
+                                        "type": "Container",
+                                        "direction": "row",
                                         "width": "100%",
-                                        "height": "100%"
+                                        "justifyContent": "space-evenly", # <--- CAMBIO CLAVE: Distribuye discos y espacio
+                                        "alignItems": "center",
+                                        "items": [
+                                            # Llamadas a la función disco con argumentos corregidos
+                                            disco("playlist_mama", "PLAYLIST MAMÁ"),
+                                            disco("playlist_renato", "PLAYLIST RENATO"),
+                                            disco("playlist_oliver", "PLAYLIST OLIVER")
+                                        ]
                                     }
-                                },
-                                # CONTENEDOR DE DISCOS (CENTRADOS)
-                                {
-                                    "type": "Container",
-                                    "direction": "row",
-                                    "grow": 1,
-                                    "width": "100%",
-                                    "justifyContent": "space-evenly",
-                                    "alignItems": "center",
-                                    "items": [
-                                        disco("playlist_mama", "PLAYLIST MAMÁ"),
-                                        disco("playlist_renato", "PLAYLIST RENATO"),
-                                        disco("playlist_oliver", "PLAYLIST OLIVER")
-                                    ]
-                                }
-                            ]
+                                ]
+                            }
                         }
-                    }
+                    ]
                 }
             ]
         }
     }
 
-def disco(evento, texto):
-    # Definimos el tamaño del disco base para calcular los centros
-    ancho_disco = 180
-    alto_disco = 180
 
+def disco(evento, texto):
     return {
         "type": "Container",
         "direction": "column",
         "alignItems": "center",
-        "width": "220dp",
+        # Quitamos padding lateral aquí, space-evenly se encarga del espacio
         "items": [
+            # CÍRCULO GRANDE (Efecto Disco)
             {
-                "type": "Container",
-                "width": "200dp",
-                "height": "200dp",
+                "type": "Frame",
+                "width": "160dp",
+                "height": "160dp",
+                "backgroundColor": "#E6E6E6",
+                "borderRadius": "80dp",
+                "justifyContent": "center",
+                "alignItems": "center",
                 "items": [
-                    # DISCO BLANCO (BASE) - Posicionado para dar aire
+                    # CÍRCULO NEGRO
                     {
                         "type": "Frame",
-                        "width": f"{ancho_disco}dp",
-                        "height": f"{alto_disco}dp",
-                        "backgroundColor": "#F5F5F0",
-                        "borderRadius": f"{ancho_disco // 2}dp",
-                        "borderWidth": "2dp",
-                        "borderColor": "#000000",
-                        "alignSelf": "center",
-                        "top": "10dp", # Pequeño aire arriba
+                        "width": "80dp",
+                        "height": "80dp",
+                        "backgroundColor": "#000000",
+                        "borderRadius": "40dp",
+                        "justifyContent": "center",
+                        "alignItems": "center",
                         "items": [
-                            # 🔷 FORZAMOS EL CENTRADO DE LOS CÍRCULOS INTERNOS CON POSICIÓN ABSOLUTA
-
-                            # CÍRCULO NEGRO MEDIANO
-                            {
-                                "type": "Frame",
-                                "width": "70dp",
-                                "height": "70dp",
-                                "backgroundColor": "#1A1A1A",
-                                "borderRadius": "35dp",
-                                "position": "absolute",
-                                # Calculamos el centro: (Padre/2) - (Hijo/2)
-                                "left": f"{(ancho_disco // 2) - 35}dp",
-                                "top": f"{(alto_disco // 2) - 35}dp"
-                            },
-                            # PUNTO BLANCO CENTRAL PEQUEÑO
+                            # CENTRO BLANCO
                             {
                                 "type": "Frame",
                                 "width": "20dp",
                                 "height": "20dp",
-                                "backgroundColor": "#F5F5F0",
-                                "borderRadius": "10dp",
-                                "position": "absolute",
-                                # Calculamos el centro: (Padre/2) - (Hijo/2)
-                                "left": f"{(ancho_disco // 2) - 10}dp",
-                                "top": f"{(alto_disco // 2) - 10}dp"
+                                "backgroundColor": "#E6E6E6",
+                                "borderRadius": "10dp"
                             }
                         ]
-                    },
-                    # NOTA MUSICAL
-                    {
-                        "type": "Text",
-                        "text": "♫",
-                        "fontSize": "40dp",
-                        "color": "#000000",
-                        "position": "absolute",
-                        "right": "15dp",
-                        "top": "0dp"
                     }
                 ]
             },
-            # BOTÓN (Se mantiene igual, centrado abajo)
+            # BOTÓN / ETIQUETA
             {
                 "type": "TouchWrapper",
                 "onPress": {
@@ -149,21 +120,21 @@ def disco(evento, texto):
                 },
                 "item": {
                     "type": "Frame",
-                    "width": "180dp",
+                    "width": "160dp",
                     "height": "50dp",
-                    "backgroundColor": "#D6EAF8",
+                    "backgroundColor": "#CFE3E8",
                     "borderRadius": "25dp",
                     "marginTop": "20dp",
+                    "justifyContent": "center",
+                    "alignItems": "center",
                     "item": {
                         "type": "Text",
                         "text": texto,
-                        "fontSize": "14dp",
-                        "color": "#005073",
+                        "fontSize": "16dp",
+                        "color": "#0E5678",
+                        "textAlign": "center", # Asegura el centrado del texto interno
                         "fontWeight": "bold",
-                        "textAlign": "center",
-                        "textAlignVertical": "center",
-                        "width": "100%",
-                        "height": "100%"
+                        "width": "100%"
                     }
                 }
             }
