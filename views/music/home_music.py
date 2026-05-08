@@ -14,61 +14,58 @@ def music_gui():
                         "type": "Container",
                         "width": "100%",
                         "height": "100%",
-                        "alignItems": "center",
                         "items": [
-                            # Recuadro blanco de borde
+                            # EL MARCO BLANCO (Ahora es solo decorativo, no empuja)
                             {
                                 "type": "Frame",
-                                "width": "95%",
-                                "height": "90%",
+                                "width": "94%",
+                                "height": "88%",
+                                "position": "absolute",
                                 "alignSelf": "center",
+                                "top": "6%",
                                 "borderWidth": "2dp",
                                 "borderColor": "#FFFFFF",
-                                "backgroundColor": "transparent",
-                                "marginTop": "2%", # Centrado manual vertical
+                                "backgroundColor": "transparent"
+                            },
+                            # EL TÍTULO (Flotando arriba)
+                            {
+                                "type": "Frame",
+                                "width": "60%",
+                                "height": "60dp",
+                                "backgroundColor": "#F0F0F0",
+                                "borderRadius": "30dp",
+                                "alignSelf": "center",
+                                "marginTop": "60dp",
                                 "item": {
-                                    "type": "Container",
-                                    "direction": "column",
+                                    "type": "Text",
+                                    "text": "CALMA TU ALMA CON UN POCO DE MÚSICA",
+                                    "fontSize": "22dp",
+                                    "color": "#000000",
+                                    "textAlign": "center",
+                                    "textAlignVertical": "center",
+                                    "fontWeight": "bold",
                                     "width": "100%",
-                                    "height": "100%",
-                                    "items": [
-                                        {"type": "Container", "height": "40dp"},
-                                        # TÍTULO
-                                        {
-                                            "type": "Frame",
-                                            "width": "60%",
-                                            "height": "60dp",
-                                            "backgroundColor": "#F0F0F0",
-                                            "borderRadius": "30dp",
-                                            "alignSelf": "center",
-                                            "item": {
-                                                "type": "Text",
-                                                "text": "CALMA TU ALMA CON UN POCO DE MÚSICA",
-                                                "fontSize": "22dp",
-                                                "color": "#000000",
-                                                "textAlign": "center",
-                                                "textAlignVertical": "center",
-                                                "fontWeight": "bold",
-                                                "width": "100%",
-                                                "height": "100%"
-                                            }
-                                        },
-                                        # 🔷 CONTENEDOR DE DISCOS (Aquí está el arreglo del centrado)
-                                        {
-                                            "type": "Container",
-                                            "direction": "row",
-                                            "width": "100%", # Forzamos el ancho completo
-                                            "grow": 1,       # Ocupa el espacio vertical restante
-                                            "justifyContent": "space-evenly", # Distribuye igual a los lados y centro
-                                            "alignItems": "center",
-                                            "items": [
-                                                disco("playlist_mama", "PLAYLIST MAMÁ"),
-                                                disco("playlist_renato", "PLAYLIST RENATO"),
-                                                disco("playlist_oliver", "PLAYLIST OLIVER")
-                                            ]
-                                        }
-                                    ]
+                                    "height": "100%"
                                 }
+                            },
+                            # 🔷 BLOQUE DE DISCOS (CENTRADO ABSOLUTO EN PANTALLA)
+                            {
+                                "type": "Container",
+                                "direction": "row",
+                                "width": "100%",
+                                "height": "300dp", # Altura fija para el bloque
+                                "position": "absolute",
+                                "top": "50%",        # Lo mandamos al centro vertical
+                                "marginTop": "-100dp", # Ajuste fino para compensar su propia altura
+                                "justifyContent": "center", # Centro horizontal
+                                "alignItems": "center",
+                                "items": [
+                                    disco("playlist_mama", "PLAYLIST MAMÁ"),
+                                    {"type": "Container", "width": "40dp"}, # Separación
+                                    disco("playlist_renato", "PLAYLIST RENATO"),
+                                    {"type": "Container", "width": "40dp"}, # Separación
+                                    disco("playlist_oliver", "PLAYLIST OLIVER")
+                                ]
                             }
                         ]
                     }
@@ -77,19 +74,19 @@ def music_gui():
         }
     }
     
+
 def disco(evento, texto):
     return {
         "type": "Container",
         "direction": "column",
         "alignItems": "center",
-        # Quitamos anchos fijos de este contenedor para que el 'space-evenly' del padre mande
         "items": [
             {
                 "type": "Container",
-                "width": "200dp",
-                "height": "200dp",
+                "width": "190dp",
+                "height": "190dp",
                 "items": [
-                    # DISCO BASE
+                    # VINILO
                     {
                         "type": "Frame",
                         "width": "180dp",
@@ -99,8 +96,7 @@ def disco(evento, texto):
                         "borderWidth": "2dp",
                         "borderColor": "#000000",
                         "position": "absolute",
-                        "left": "10dp",
-                        "top": "10dp"
+                        "left": "5dp"
                     },
                     # CÍRCULO NEGRO
                     {
@@ -110,19 +106,19 @@ def disco(evento, texto):
                         "backgroundColor": "#1A1A1A",
                         "borderRadius": "40dp",
                         "position": "absolute",
-                        "left": "60dp", 
-                        "top": "60dp"
+                        "left": "55dp", 
+                        "top": "50dp"
                     },
                     # PUNTO BLANCO
                     {
                         "type": "Frame",
-                        "width": "24dp",
-                        "height": "24dp",
+                        "width": "22dp",
+                        "height": "22dp",
                         "backgroundColor": "#F5F5F0",
-                        "borderRadius": "12dp",
+                        "borderRadius": "11dp",
                         "position": "absolute",
-                        "left": "88dp",
-                        "top": "88dp"
+                        "left": "84dp",
+                        "top": "79dp"
                     },
                     # NOTA
                     {
@@ -131,8 +127,8 @@ def disco(evento, texto):
                         "fontSize": "45dp",
                         "color": "#000000",
                         "position": "absolute",
-                        "right": "10dp",
-                        "top": "0dp"
+                        "right": "0dp",
+                        "top": "-10dp"
                     }
                 ]
             },
@@ -142,15 +138,15 @@ def disco(evento, texto):
                 "onPress": {"type": "SendEvent", "arguments": [evento]},
                 "item": {
                     "type": "Frame",
-                    "width": "180dp",
+                    "width": "190dp",
                     "height": "50dp",
                     "backgroundColor": "#D6EAF8",
                     "borderRadius": "25dp",
-                    "marginTop": "20dp",
+                    "marginTop": "10dp",
                     "item": {
                         "type": "Text",
                         "text": texto,
-                        "fontSize": "14dp",
+                        "fontSize": "15dp",
                         "color": "#005073",
                         "fontWeight": "bold",
                         "textAlign": "center",
