@@ -58,8 +58,7 @@ def music_gui():
                                         }
                                     },
                                     
-                                    # 🔷 ESTA ES LA CLAVE: Espacio entre título y discos
-                                    # Cámbialo de 40dp a 20dp si quieres que estén aún más pegados
+                                    #Espacio entre título y discos
                                     {"type": "Container", "height": "80dp"}, 
 
                                     # FILA DE DISCOS

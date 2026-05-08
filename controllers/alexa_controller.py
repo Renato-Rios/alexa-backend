@@ -5,7 +5,27 @@ from views.learn.fase_1 import fase_1_gui
 from views.music.home_music import music_gui
 from services.alexa_service import procesar_accion
 import psycopg2
+import requests
 
+def play_spotify_playlist(token, playlist_id):
+    """Envía una petición PUT a Spotify para iniciar una playlist específica."""
+    url = "https://api.spotify.com/v1/me/player/play"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+    # context_uri le dice a Spotify que reproduzca el álbum/playlist completo
+    data = {
+        "context_uri": f"spotify:playlist:{playlist_id}"
+    }
+    
+    try:
+        response = requests.put(url, headers=headers, json=data)
+        return response.status_code
+    except Exception as e:
+        print(f"Error conectando con Spotify: {e}")
+        return 500
+#funcion encargada de obtener informacion de la base de datos para fase 1
 def get_learning_content():
     conn = psycopg2.connect(
         host="dpg-d7klgul7vvec73cebok0-a.oregon-postgres.render.com",
@@ -69,9 +89,10 @@ def manejar_request(data):
         argumentos = data["request"].get("arguments", [])
         accion = argumentos[0] if argumentos else None
         
-        documento = pantalla_principal() # Default
+        documento = pantalla_principal()
         texto = "Cargando selección"
 
+        # --- LÓGICA DE NAVEGACIÓN ---
         if accion == "aprender":
             texto = "Entrando a aprender"
             documento = learn_gui()
@@ -94,19 +115,57 @@ def manejar_request(data):
                     }
                 }
             else:
-                texto = "No encontré contenido en la base de datos"
+                texto = "No encontré contenido"
                 documento = learn_gui()
 
+        # --- 🔷 LÓGICA DE SPOTIFY ---
+        elif accion in ["playlist_mama", "playlist_renato", "playlist_oliver"]:
+            # Intentamos obtener el token de Spotify vinculado
+            access_token = data["context"]["System"]["user"].get("accessToken")
+            
+            if not access_token:
+                return jsonify({
+                    "version": "1.0",
+                    "response": {
+                        "outputSpeech": {
+                            "type": "PlainText", 
+                            "text": "Por favor, vincula tu cuenta de Spotify en la aplicación de Alexa para continuar."
+                        },
+                        "card": {"type": "LinkAccount"} # Manda la tarjeta de vinculación al celular
+                    }
+                })
+
+            # Diccionario de IDs (Sustituye estos códigos por tus IDs reales de Spotify)
+            playlists = {
+                "playlist_mama": "0KQyC28P9808r0oKKNgHvp",
+                "playlist_renato": "37i9dQZF1DXcBWIGvYBM3s",
+                "playlist_oliver": "3PDxZ7MCDaJ07Kvz47MQIq"
+            }
+
+            playlist_id = playlists.get(accion)
+            status = play_spotify_playlist(access_token, playlist_id)
+
+            if status == 204:
+                texto = "Poniendo tu música en Spotify."
+            elif status == 403:
+                texto = "Para controlar Spotify necesito que tu cuenta sea Premium."
+            elif status == 404:
+                texto = "No detecto un dispositivo activo. Abre Spotify en tu Alexa o celular primero."
+            else:
+                texto = "Hubo un problema al conectar con Spotify."
+            
+            # Como la música suena de fondo, no necesitamos renderizar un documento nuevo
+            # pero devolvemos el documento de música para que la interfaz no se cierre.
+            documento = music_gui()
+
+        # Respuesta para UserEvent
         return jsonify({
             "version": "1.0",
             "response": {
-                "outputSpeech": {
-                    "type": "PlainText",
-                    "text": texto
-                },
+                "outputSpeech": {"type": "PlainText", "text": texto},
                 "directives": [{
                     "type": "Alexa.Presentation.APL.RenderDocument",
-                    "token": "fase_token",
+                    "token": "nav_token",
                     "document": documento,
                     "datasources": datasources
                 }],
@@ -166,145 +225,3 @@ def manejar_request(data):
             "shouldEndSession": False
         }
     })
-    
-# def manejar_request(data):
-#     datasources = {}
-#     tipo = data["request"]["type"]
-
-#     if tipo == "LaunchRequest":
-
-#         return jsonify({
-#             "version": "1.0",
-#             "response": {
-#                 "outputSpeech": {
-#                     "type": "PlainText",
-#                     "text": "Estamos en Asistente C"
-#                 },
-
-#                 "directives": [
-#                     {
-#                         "type": "Alexa.Presentation.APL.RenderDocument",
-#                         "token": "main",
-#                         "document": pantalla_principal(),
-#                         "datasources": {}
-#                     }
-#                 ],
-
-#                 "shouldEndSession": False
-#             }
-#         })
-
-#     # Botones
-#     if tipo == "Alexa.Presentation.APL.UserEvent":
-#         accion = data["request"]["arguments"][0]
-#         if not accion:
-#             texto = "No entendí a dónde quieres ir"
-#         elif accion == "aprender":
-#             texto = "Entrando a aprender"
-#             documento = learn_gui()
-
-#         elif accion == "musica":
-#             texto = "Entrando a música"
-#             documento = music_gui()
-#         elif accion == "fase1":
-#             contenido = get_learning_content()
-            
-#             if contenido:
-#                 texto = f"La palabra es {contenido['word']}"
-#                 documento = fase_1_gui()
-                
-#                 datasources = {
-#                     "datosFase": {
-#                         "type": "object",
-#                         "word": contenido['word'],
-#                         "image": contenido['image'],
-#                         "phonetic": contenido['phonetic']
-#                     }
-#                 }
-#             else:
-#                 texto = "No encontré contenido"
-#                 documento = learn_gui()
-#                 datasources = {}
-#         else:
-#             texto = "Opción no válida"
-#             documento = pantalla_principal()
-
-#         return jsonify({
-#             "version": "1.0",
-#             "response": {
-#                 "outputSpeech": {
-#                     "type": "PlainText",
-#                     "text": texto
-#                 },
-#                 "directives": [
-#                     {
-#                     "type": "Alexa.Presentation.APL.RenderDocument",
-#                     "token": "cambio",
-#                     "document": documento,
-#                     "datasources": datasources
-#                     }
-#                 ],
-#                 "shouldEndSession": False
-#             }
-#         })
-
-#     #Intent
-#     if tipo == "IntentRequest":
-#         intent = data["request"]["intent"]["name"]
-
-#         if intent == "HablarIntent":
-#             slots = data["request"]["intent"].get("slots", {})
-#             accion = slots.get("accion", {}).get("value")  # 🔥 ESTA LÍNEA FALTABA
-
-#             if not accion:
-#                 texto = "No entendí a dónde quieres ir"
-#             else:
-#                 texto = procesar_accion(accion)
-
-#             return jsonify({
-#                 "version": "1.0",
-#                 "response": {
-#             "outputSpeech": {
-#                 "type": "PlainText",
-#                 "text": texto
-#             },
-#             "shouldEndSession": False
-#                 }
-#             })
-#         # Ayuda
-#         if intent == "AMAZON.HelpIntent":
-#             return jsonify({
-#                 "version": "1.0",
-#                 "response": {
-#                     "outputSpeech": {
-#                         "type": "PlainText",
-#                         "text": "En esta skill puedes aprender sobre nuestro lenguaje y escuchar música, con solo decir Alexa, vamos a aprender"+
-#                             "o Alexa, vamos a escuchar música se activarán las funciones correspondientes"
-#                     },
-#                     "shouldEndSession": False
-#                 }
-#             })
-#         #Salida
-#         if intent == "AMAZON.CancelIntent" or intent == "AMAZON.StopIntent":
-#             return jsonify({
-#                 "version": "1.0",
-#                 "response": {
-#                     "outputSpeech": {
-#                         "type": "PlainText",
-#                         "text": "Eso es todo por ahora, cerrando asistente C"
-#                     },
-#                     "shouldEndSession": True
-#                 }
-#             })
-    
-#     #Cada vez que no se entienda la petición
-#     return jsonify({
-#         "version": "1.0",
-#         "response": {
-#             "outputSpeech": {
-#                 "type": "PlainText",
-#                 "text": "Error"
-#             },
-#             "shouldEndSession": False
-#         }
-#     })
