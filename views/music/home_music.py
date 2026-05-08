@@ -15,7 +15,7 @@ def music_gui():
                         "width": "100%",
                         "height": "100%",
                         "items": [
-                            # EL MARCO BLANCO (Ahora es solo decorativo, no empuja)
+                            # MARCO BLANCO (Absoluto para que sea solo decorativo)
                             {
                                 "type": "Frame",
                                 "width": "94%",
@@ -27,44 +27,55 @@ def music_gui():
                                 "borderColor": "#FFFFFF",
                                 "backgroundColor": "transparent"
                             },
-                            # EL TÍTULO (Flotando arriba)
-                            {
-                                "type": "Frame",
-                                "width": "60%",
-                                "height": "60dp",
-                                "backgroundColor": "#F0F0F0",
-                                "borderRadius": "30dp",
-                                "alignSelf": "center",
-                                "marginTop": "60dp",
-                                "item": {
-                                    "type": "Text",
-                                    "text": "CALMA TU ALMA CON UN POCO DE MÚSICA",
-                                    "fontSize": "22dp",
-                                    "color": "#000000",
-                                    "textAlign": "center",
-                                    "textAlignVertical": "center",
-                                    "fontWeight": "bold",
-                                    "width": "100%",
-                                    "height": "100%"
-                                }
-                            },
-                            # 🔷 BLOQUE DE DISCOS (CENTRADO ABSOLUTO EN PANTALLA)
+                            # CONTENEDOR DE CONTENIDO (Título + Discos)
                             {
                                 "type": "Container",
-                                "direction": "row",
                                 "width": "100%",
-                                "height": "300dp", # Altura fija para el bloque
-                                "position": "absolute",
-                                "top": "50%",        # Lo mandamos al centro vertical
-                                "marginTop": "-100dp", # Ajuste fino para compensar su propia altura
-                                "justifyContent": "center", # Centro horizontal
+                                "height": "100%",
+                                "direction": "column",
                                 "alignItems": "center",
                                 "items": [
-                                    disco("playlist_mama", "PLAYLIST MAMÁ"),
-                                    {"type": "Container", "width": "40dp"}, # Separación
-                                    disco("playlist_renato", "PLAYLIST RENATO"),
-                                    {"type": "Container", "width": "40dp"}, # Separación
-                                    disco("playlist_oliver", "PLAYLIST OLIVER")
+                                    # Espacio desde el borde superior de la pantalla
+                                    {"type": "Container", "height": "60dp"},
+                                    
+                                    # TÍTULO
+                                    {
+                                        "type": "Frame",
+                                        "width": "60%",
+                                        "height": "60dp",
+                                        "backgroundColor": "#F0F0F0",
+                                        "borderRadius": "30dp",
+                                        "item": {
+                                            "type": "Text",
+                                            "text": "CALMA TU ALMA CON UN POCO DE MÚSICA",
+                                            "fontSize": "22dp",
+                                            "color": "#000000",
+                                            "textAlign": "center",
+                                            "textAlignVertical": "center",
+                                            "fontWeight": "bold",
+                                            "width": "100%",
+                                            "height": "100%"
+                                        }
+                                    },
+                                    
+                                    # 🔷 ESTA ES LA CLAVE: Espacio entre título y discos
+                                    # Cámbialo de 40dp a 20dp si quieres que estén aún más pegados
+                                    {"type": "Container", "height": "40dp"}, 
+
+                                    # FILA DE DISCOS
+                                    {
+                                        "type": "Container",
+                                        "direction": "row",
+                                        "width": "100%",
+                                        "justifyContent": "center",
+                                        "items": [
+                                            disco("playlist_mama", "PLAYLIST MAMÁ"),
+                                            {"type": "Container", "width": "30dp"},
+                                            disco("playlist_renato", "PLAYLIST RENATO"),
+                                            {"type": "Container", "width": "30dp"},
+                                            disco("playlist_oliver", "PLAYLIST OLIVER")
+                                        ]
+                                    }
                                 ]
                             }
                         ]
@@ -73,7 +84,6 @@ def music_gui():
             ]
         }
     }
-    
 
 def disco(evento, texto):
     return {
