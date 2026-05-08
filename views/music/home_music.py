@@ -6,26 +6,26 @@ def music_gui():
             "parameters": ["payload"],
             "items": [
                 {
-                    # ESTE FRAME DA EL COLOR ROJO
                     "type": "Frame",
                     "width": "100%",
                     "height": "100%",
-                    "backgroundColor": "#710014", 
+                    "backgroundColor": "#710014",
                     "item": {
-                        # ESTE CONTAINER CENTRA EL RECUADRO BLANCO
                         "type": "Container",
                         "width": "100%",
                         "height": "100%",
-                        "justifyContent": "center",
                         "alignItems": "center",
                         "items": [
+                            # Recuadro blanco de borde
                             {
                                 "type": "Frame",
                                 "width": "95%",
                                 "height": "90%",
+                                "alignSelf": "center",
                                 "borderWidth": "2dp",
                                 "borderColor": "#FFFFFF",
                                 "backgroundColor": "transparent",
+                                "marginTop": "2%", # Centrado manual vertical
                                 "item": {
                                     "type": "Container",
                                     "direction": "column",
@@ -53,13 +53,13 @@ def music_gui():
                                                 "height": "100%"
                                             }
                                         },
-                                        # DISCOS
+                                        # 🔷 CONTENEDOR DE DISCOS (Aquí está el arreglo del centrado)
                                         {
                                             "type": "Container",
                                             "direction": "row",
-                                            "grow": 1,
-                                            "width": "100%",
-                                            "justifyContent": "space-evenly",
+                                            "width": "100%", # Forzamos el ancho completo
+                                            "grow": 1,       # Ocupa el espacio vertical restante
+                                            "justifyContent": "space-evenly", # Distribuye igual a los lados y centro
                                             "alignItems": "center",
                                             "items": [
                                                 disco("playlist_mama", "PLAYLIST MAMÁ"),
@@ -76,13 +76,13 @@ def music_gui():
             ]
         }
     }
-
+    
 def disco(evento, texto):
     return {
         "type": "Container",
         "direction": "column",
         "alignItems": "center",
-        "width": "220dp",
+        # Quitamos anchos fijos de este contenedor para que el 'space-evenly' del padre mande
         "items": [
             {
                 "type": "Container",
@@ -102,7 +102,7 @@ def disco(evento, texto):
                         "left": "10dp",
                         "top": "10dp"
                     },
-                    # CÍRCULO NEGRO (Calculado al centro de 200dp)
+                    # CÍRCULO NEGRO
                     {
                         "type": "Frame",
                         "width": "80dp",
@@ -113,7 +113,7 @@ def disco(evento, texto):
                         "left": "60dp", 
                         "top": "60dp"
                     },
-                    # PUNTO BLANCO (Calculado al centro de 200dp)
+                    # PUNTO BLANCO
                     {
                         "type": "Frame",
                         "width": "24dp",
@@ -142,15 +142,15 @@ def disco(evento, texto):
                 "onPress": {"type": "SendEvent", "arguments": [evento]},
                 "item": {
                     "type": "Frame",
-                    "width": "190dp",
-                    "height": "55dp",
+                    "width": "180dp",
+                    "height": "50dp",
                     "backgroundColor": "#D6EAF8",
-                    "borderRadius": "28dp",
-                    "marginTop": "15dp",
+                    "borderRadius": "25dp",
+                    "marginTop": "20dp",
                     "item": {
                         "type": "Text",
                         "text": texto,
-                        "fontSize": "16dp",
+                        "fontSize": "14dp",
                         "color": "#005073",
                         "fontWeight": "bold",
                         "textAlign": "center",
