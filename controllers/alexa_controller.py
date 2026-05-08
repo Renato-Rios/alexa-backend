@@ -8,23 +8,24 @@ import psycopg2
 import requests
 
 def play_spotify_playlist(token, playlist_id):
-    """Envía una petición PUT a Spotify para iniciar una playlist específica."""
+    """Envía la orden a la API de Spotify usando el token de vinculación."""
     url = "https://api.spotify.com/v1/me/player/play"
     headers = {
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json"
     }
-    # context_uri le dice a Spotify que reproduzca el álbum/playlist completo
     data = {
         "context_uri": f"spotify:playlist:{playlist_id}"
     }
     
     try:
+        # Spotify responde con un 204 si todo sale bien
         response = requests.put(url, headers=headers, json=data)
         return response.status_code
     except Exception as e:
-        print(f"Error conectando con Spotify: {e}")
+        print(f"Error en Spotify API: {e}")
         return 500
+
 #funcion encargada de obtener informacion de la base de datos para fase 1
 def get_learning_content():
     conn = psycopg2.connect(
@@ -120,22 +121,22 @@ def manejar_request(data):
 
         # --- 🔷 LÓGICA DE SPOTIFY ---
         elif accion in ["playlist_mama", "playlist_renato", "playlist_oliver"]:
-            # Intentamos obtener el token de Spotify vinculado
             access_token = data["context"]["System"]["user"].get("accessToken")
             
+            # Si no hay vinculación, mandamos la tarjeta especial
             if not access_token:
                 return jsonify({
                     "version": "1.0",
                     "response": {
                         "outputSpeech": {
                             "type": "PlainText", 
-                            "text": "Por favor, vincula tu cuenta de Spotify en la aplicación de Alexa para continuar."
+                            "text": "Para escuchar música, vincula tu cuenta de Spotify en la app de Alexa."
                         },
-                        "card": {"type": "LinkAccount"} # Manda la tarjeta de vinculación al celular
+                        "card": {"type": "LinkAccount"}
                     }
                 })
 
-            # Diccionario de IDs (Sustituye estos códigos por tus IDs reales de Spotify)
+            # Diccionario con tus IDs de 22 caracteres
             playlists = {
                 "playlist_mama": "0KQyC28P9808r0oKKNgHvp",
                 "playlist_renato": "37i9dQZF1DXcBWIGvYBM3s",
@@ -146,16 +147,14 @@ def manejar_request(data):
             status = play_spotify_playlist(access_token, playlist_id)
 
             if status == 204:
-                texto = "Poniendo tu música en Spotify."
-            elif status == 403:
-                texto = "Para controlar Spotify necesito que tu cuenta sea Premium."
+                texto = "¡Claro! Disfruta la música."
             elif status == 404:
-                texto = "No detecto un dispositivo activo. Abre Spotify en tu Alexa o celular primero."
+                texto = "No encontré un dispositivo activo. Abre Spotify en tu Alexa o celular un momento."
+            elif status == 403:
+                texto = "Spotify me dice que necesitas una cuenta Premium para controlar la música así."
             else:
                 texto = "Hubo un problema al conectar con Spotify."
             
-            # Como la música suena de fondo, no necesitamos renderizar un documento nuevo
-            # pero devolvemos el documento de música para que la interfaz no se cierre.
             documento = music_gui()
 
         # Respuesta para UserEvent
