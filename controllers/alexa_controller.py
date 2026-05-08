@@ -22,6 +22,7 @@ def get_learning_content():
         FROM words w
         JOIN images i ON w.id = i.word_id
         WHERE i.patient_id = 1
+        ORDER BY RANDOM()
         LIMIT 1;
     """)
 

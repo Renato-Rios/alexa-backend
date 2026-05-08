@@ -28,7 +28,7 @@ def fase_1_gui():
                                     {
                                         "type": "Image",
                                         "source": "${payload.datosFase.image}",
-                                        "width": "400dp",
+                                        "width": "600dp",
                                         "height": "400dp",
                                         "scale": "best-fit",
                                         "align": "center"
