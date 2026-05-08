@@ -2,142 +2,127 @@ def music_gui():
     return {
         "type": "APL",
         "version": "1.7",
+        "import": [
+            {
+                "name": "alexa-layouts",
+                "version": "1.5.0"
+            }
+        ],
         "mainTemplate": {
             "parameters": ["payload"],
             "items": [
                 {
-                    "type": "Container",
+                    "type": "Frame",
                     "width": "100%",
                     "height": "100%",
-                    "items": [
-                        {
-                            # FONDO
-                            "type": "Frame",
+                    "backgroundColor": "#710014", # Rojo oscuro de fondo
+                    "item": {
+                        "type": "Frame",
+                        "width": "95%",
+                        "height": "90%",
+                        "alignSelf": "center",
+                        "borderWidth": "2dp",
+                        "borderColor": "#FFFFFF",
+                        "item": {
+                            "type": "Container",
+                            "direction": "column",
                             "width": "100%",
                             "height": "100%",
-                            "backgroundColor": "#710014",
-
+                            "alignItems": "center",
                             "items": [
+                                {"type": "Container", "height": "40dp"},
+                                # TÍTULO SUPERIOR
                                 {
-                                    # BORDE
                                     "type": "Frame",
-                                    "width": "90%",
-                                    "height": "85%",
-                                    "alignSelf": "center",
-                                    "borderWidth": "3dp",
-                                    "borderColor": "#FFFFFF",
-
+                                    "width": "60%",
+                                    "height": "60dp",
+                                    "backgroundColor": "#F0F0F0",
+                                    "borderRadius": "30dp",
+                                    "item": {
+                                        "type": "Text",
+                                        "text": "CALMA TU ALMA CON UN POCO DE MÚSICA",
+                                        "fontSize": "22dp",
+                                        "color": "#000000",
+                                        "textAlign": "center",
+                                        "textAlignVertical": "center",
+                                        "fontWeight": "bold",
+                                        "width": "100%",
+                                        "height": "100%"
+                                    }
+                                },
+                                # CONTENEDOR DE DISCOS (CENTRADOS)
+                                {
+                                    "type": "Container",
+                                    "direction": "row",
+                                    "grow": 1,
+                                    "width": "100%",
+                                    "justifyContent": "space-evenly",
+                                    "alignItems": "center",
                                     "items": [
-                                        {
-                                            # CONTENEDOR GENERAL
-                                            "type": "Container",
-                                            "direction": "column",
-                                            "width": "100%",
-                                            "height": "100%",
-                                            "alignItems": "center",
-                                            "justifyContent": "flex-start",
-
-                                            "items": [
-
-                                                {"type": "Container", "height": "40dp"},
-
-                                                # TITULO
-                                                {
-                                                    "type": "Frame",
-                                                    "width": "70%",
-                                                    "height": "70dp",
-                                                    "backgroundColor": "#E6E6E6",
-                                                    "borderRadius": "40dp",
-                                                    "justifyContent": "center",
-                                                    "alignItems": "center",
-                                                    "alignSelf": "center",
-                                                    "items": [
-                                                        {
-                                                            "type": "Text",
-                                                            "text": "CALMA TU ALMA CON UN POCO DE MÚSICA",
-                                                            "fontSize": "24dp",
-                                                            "color": "#000000",
-                                                            "textAlign": "center",
-                                                            "fontWeight": "bold",
-                                                            "width": "100%"
-                                                        }
-                                                    ]
-                                                },
-
-                                                {"type": "Container", "height": "60dp"},
-
-                                                # FILA DE DISCOS
-                                                {
-                                                    "type": "Container",
-                                                    "direction": "row",
-                                                    "width": "100%",
-                                                    "justifyContent": "space-evenly",
-                                                    "alignItems": "center",
-
-                                                    "items": [
-                                                        disco("playlist_mama", "PLAYLIST MAMÁ"),
-                                                        disco("playlist_renato", "PLAYLIST RENATO"),
-                                                        disco("playlist_oliver", "PLAYLIST OLIVER")
-                                                    ]
-                                                }
-                                            ]
-                                        }
+                                        disco("playlist_mama", "PLAYLIST MAMÁ"),
+                                        disco("playlist_renato", "PLAYLIST RENATO"),
+                                        disco("playlist_oliver", "PLAYLIST OLIVER")
                                     ]
                                 }
                             ]
                         }
-                    ]
+                    }
                 }
             ]
         }
     }
-
 
 def disco(evento, texto):
     return {
         "type": "Container",
         "direction": "column",
         "alignItems": "center",
-        "justifyContent": "center",
-
         "items": [
-
-            # CÍRCULO GRANDE
+            # GRUPO DISCO + NOTA MUSICAL
             {
-                "type": "Frame",
-                "width": "160dp",
-                "height": "160dp",
-                "backgroundColor": "#E6E6E6",
-                "borderRadius": "80dp",
-                "justifyContent": "center",
-                "alignItems": "center",
-
+                "type": "Container",
                 "items": [
-                    # CÍRCULO NEGRO
+                    # DISCO (VINILO)
                     {
                         "type": "Frame",
-                        "width": "80dp",
-                        "height": "80dp",
-                        "backgroundColor": "#000000",
-                        "borderRadius": "40dp",
+                        "width": "200dp",
+                        "height": "200dp",
+                        "backgroundColor": "#F5F5F0", # Color crema de la imagen
+                        "borderRadius": "100dp",
+                        "borderWidth": "3dp",
+                        "borderColor": "#000000",
                         "justifyContent": "center",
                         "alignItems": "center",
-
-                        "items": [
-                            # CENTRO BLANCO
-                            {
+                        "item": {
+                            "type": "Frame",
+                            "width": "80dp",
+                            "height": "80dp",
+                            "backgroundColor": "#1A1A1A",
+                            "borderRadius": "40dp",
+                            "justifyContent": "center",
+                            "alignItems": "center",
+                            "item": {
                                 "type": "Frame",
-                                "width": "20dp",
-                                "height": "20dp",
-                                "backgroundColor": "#E6E6E6",
-                                "borderRadius": "10dp"
+                                "width": "25dp",
+                                "height": "25dp",
+                                "backgroundColor": "#F5F5F0",
+                                "borderRadius": "12dp"
                             }
-                        ]
+                        }
+                    },
+                    # NOTA MUSICAL (Posicionada arriba a la derecha)
+                    {
+                        "type": "Text",
+                        "text": "♫", # Carácter unicode o podrías usar un VectorGraphic
+                        "fontSize": "60dp",
+                        "color": "#000000",
+                        "position": "absolute",
+                        "right": "0dp",
+                        "top": "-20dp"
                     }
                 ]
             },
-
-            # BOTÓN
+            # BOTÓN DE PLAYLIST
             {
                 "type": "TouchWrapper",
                 "onPress": {
@@ -146,25 +131,22 @@ def disco(evento, texto):
                 },
                 "item": {
                     "type": "Frame",
-                    "width": "160dp",
-                    "height": "50dp",
-                    "backgroundColor": "#CFE3E8",
-                    "borderRadius": "25dp",
-                    "marginTop": "20dp",
-                    "justifyContent": "center",
-                    "alignItems": "center",
-
-                    "items": [
-                        {
-                            "type": "Text",
-                            "text": texto,
-                            "fontSize": "18dp",
-                            "color": "#0E5678",
-                            "textAlign": "center",
-                            "fontWeight": "bold",
-                            "width": "100%"
-                        }
-                    ]
+                    "width": "180dp",
+                    "height": "55dp",
+                    "backgroundColor": "#D6EAF8", # Azul claro
+                    "borderRadius": "28dp",
+                    "marginTop": "30dp",
+                    "item": {
+                        "type": "Text",
+                        "text": texto,
+                        "fontSize": "16dp",
+                        "color": "#005073",
+                        "textAlign": "center",
+                        "textAlignVertical": "center",
+                        "fontWeight": "bold",
+                        "width": "100%",
+                        "height": "100%"
+                    }
                 }
             }
         ]
