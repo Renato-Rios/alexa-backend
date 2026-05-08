@@ -6,30 +6,30 @@ def music_gui():
             "parameters": ["payload"],
             "items": [
                 {
+                    # 1. CONTENEDOR RAIZ: Ocupa toda la pantalla y centra el marco
                     "type": "Container",
                     "width": "100vw",
                     "height": "100vh",
                     "backgroundColor": "#710014",
-                    "alignItems": "center",       # Centra horizontalmente todo el bloque
-                    "justifyContent": "center",    # Centra verticalmente todo el bloque
+                    "alignItems": "center",
+                    "justifyContent": "center",
                     "items": [
                         {
-                            # MARCO / BORDE BLANCO
+                            # 2. EL MARCO BLANCO: Centra todo su contenido internamente
                             "type": "Frame",
                             "width": "90%",
                             "height": "85%",
                             "borderWidth": "3dp",
                             "borderColor": "#FFFFFF",
                             "item": {
-                                # CONTENEDOR DE CONTENIDO (Dentro del borde)
                                 "type": "Container",
                                 "width": "100%",
                                 "height": "100%",
                                 "direction": "column",
                                 "alignItems": "center",
-                                "justifyContent": "center", # <--- Centrado absoluto vertical
+                                "justifyContent": "center", # Centrado vertical absoluto
                                 "items": [
-                                    # TITULO
+                                    # 3. TITULO: Centrado arriba con margen fijo
                                     {
                                         "type": "Frame",
                                         "width": "75%",
@@ -38,30 +38,33 @@ def music_gui():
                                         "borderRadius": "37.5dp",
                                         "justifyContent": "center",
                                         "alignItems": "center",
-                                        "marginBottom": "50dp", # Espacio debajo del título
+                                        "marginTop": "20dp",   # Margen superior para equilibrio
+                                        "marginBottom": "auto", # Empuja los discos hacia el centro
                                         "item": {
                                             "type": "Text",
-                                            "text": "CALMA TU ALMA CON UN POCO DE MÚSICA",
-                                            "fontSize": "26dp", # Un poco más grande para mejor lectura
+                                            "text": "CALMA TU ALMA con un poco de música".upper(),
+                                            "fontSize": "24dp",
                                             "color": "#000000",
                                             "textAlign": "center",
                                             "fontWeight": "bold"
                                         }
                                     },
-                                    # FILA DE DISCOS (Aquí es donde estaba el problema)
+                                    # 4. FILA DE DISCOS: Distribución simétrica
                                     {
                                         "type": "Container",
                                         "direction": "row",
                                         "width": "100%",
-                                        "justifyContent": "space-evenly", # <--- CAMBIO CLAVE: Distribuye discos y espacio
+                                        "grow": 1,              # Toma el espacio central
+                                        "justifyContent": "space-around", # Centrado horizontal absoluto de los 3
                                         "alignItems": "center",
                                         "items": [
-                                            # Llamadas a la función disco con argumentos corregidos
                                             disco("playlist_mama", "PLAYLIST MAMÁ"),
                                             disco("playlist_renato", "PLAYLIST RENATO"),
                                             disco("playlist_oliver", "PLAYLIST OLIVER")
                                         ]
-                                    }
+                                    },
+                                    # Espaciador inferior invisible para forzar el centro real
+                                    {"type": "Container", "height": "20dp"}
                                 ]
                             }
                         }
@@ -77,9 +80,9 @@ def disco(evento, texto):
         "type": "Container",
         "direction": "column",
         "alignItems": "center",
-        # Quitamos padding lateral aquí, space-evenly se encarga del espacio
+        "justifyContent": "center",
         "items": [
-            # CÍRCULO GRANDE (Efecto Disco)
+            # EL DISCO (Círculos concéntricos)
             {
                 "type": "Frame",
                 "width": "160dp",
@@ -89,7 +92,6 @@ def disco(evento, texto):
                 "justifyContent": "center",
                 "alignItems": "center",
                 "items": [
-                    # CÍRCULO NEGRO
                     {
                         "type": "Frame",
                         "width": "80dp",
@@ -99,7 +101,6 @@ def disco(evento, texto):
                         "justifyContent": "center",
                         "alignItems": "center",
                         "items": [
-                            # CENTRO BLANCO
                             {
                                 "type": "Frame",
                                 "width": "20dp",
@@ -111,7 +112,7 @@ def disco(evento, texto):
                     }
                 ]
             },
-            # BOTÓN / ETIQUETA
+            # EL BOTÓN
             {
                 "type": "TouchWrapper",
                 "onPress": {
@@ -130,9 +131,9 @@ def disco(evento, texto):
                     "item": {
                         "type": "Text",
                         "text": texto,
-                        "fontSize": "16dp",
+                        "fontSize": "15dp",
                         "color": "#0E5678",
-                        "textAlign": "center", # Asegura el centrado del texto interno
+                        "textAlign": "center",
                         "fontWeight": "bold",
                         "width": "100%"
                     }
