@@ -2,132 +2,141 @@ def music_gui():
     return {
         "type": "APL",
         "version": "1.7",
-        "import": [
-            {
-                "name": "alexa-layouts",
-                "version": "1.5.0"
-            }
-        ],
         "mainTemplate": {
             "parameters": ["payload"],
             "items": [
                 {
-                    "type": "Frame",
+                    "type": "Container",
                     "width": "100%",
                     "height": "100%",
-                    "backgroundColor": "#710014", # Rojo oscuro de fondo
-                    "item": {
-                        "type": "Frame",
-                        "width": "95%",
-                        "height": "90%",
-                        "alignSelf": "center",
-                        "borderWidth": "2dp",
-                        "borderColor": "#FFFFFF",
-                        "item": {
-                            "type": "Container",
-                            "direction": "column",
+                    "items": [
+                        {
+                            # FONDO
+                            "type": "Frame",
                             "width": "100%",
                             "height": "100%",
-                            "alignItems": "center",
+                            "backgroundColor": "#710014",
+                            "justifyContent": "center",  # Centra verticalmente el borde blanco
+                            "alignItems": "center",      # Centra horizontalmente el borde blanco
+
                             "items": [
-                                {"type": "Container", "height": "40dp"},
-                                # TÍTULO SUPERIOR
                                 {
+                                    # BORDE
                                     "type": "Frame",
-                                    "width": "60%",
-                                    "height": "60dp",
-                                    "backgroundColor": "#F0F0F0",
-                                    "borderRadius": "30dp",
-                                    "item": {
-                                        "type": "Text",
-                                        "text": "CALMA TU ALMA CON UN POCO DE MÚSICA",
-                                        "fontSize": "22dp",
-                                        "color": "#000000",
-                                        "textAlign": "center",
-                                        "textAlignVertical": "center",
-                                        "fontWeight": "bold",
-                                        "width": "100%",
-                                        "height": "100%"
-                                    }
-                                },
-                                # CONTENEDOR DE DISCOS (CENTRADOS)
-                                {
-                                    "type": "Container",
-                                    "direction": "row",
-                                    "grow": 1,
-                                    "width": "100%",
-                                    "justifyContent": "space-evenly",
-                                    "alignItems": "center",
+                                    "width": "90%",
+                                    "height": "85%",
+                                    "borderWidth": "3dp",
+                                    "borderColor": "#FFFFFF",
+
                                     "items": [
-                                        disco("playlist_mama", "PLAYLIST MAMÁ"),
-                                        disco("playlist_renato", "PLAYLIST RENATO"),
-                                        disco("playlist_oliver", "PLAYLIST OLIVER")
+                                        {
+                                            # CONTENEDOR GENERAL
+                                            "type": "Container",
+                                            "direction": "column",
+                                            "width": "100%",
+                                            "height": "100%",
+                                            "alignItems": "center",
+                                            "justifyContent": "center", # Centra todo el contenido verticalmente dentro del borde
+
+                                            "items": [
+                                                # TITULO
+                                                {
+                                                    "type": "Frame",
+                                                    "width": "70%",
+                                                    "height": "70dp",
+                                                    "backgroundColor": "#E6E6E6",
+                                                    "borderRadius": "35dp",
+                                                    "justifyContent": "center",
+                                                    "alignItems": "center",
+                                                    "items": [
+                                                        {
+                                                            "type": "Text",
+                                                            "text": "CALMA TU ALMA CON UN POCO DE MÚSICA",
+                                                            "fontSize": "22dp",
+                                                            "color": "#000000",
+                                                            "textAlign": "center",
+                                                            "fontWeight": "bold",
+                                                            "width": "100%"
+                                                        }
+                                                    ]
+                                                },
+
+                                                # Espacio controlado entre el título y los discos
+                                                {"type": "Container", "height": "40dp"},
+
+                                                # FILA DE DISCOS (Centrada horizontalmente)
+                                                {
+                                                    "type": "Container",
+                                                    "direction": "row",
+                                                    "width": "100%",
+                                                    "justifyContent": "center", # Los junta y los centra en grupo
+                                                    "alignItems": "center",
+
+                                                    "items": [
+                                                        disco("playlist_mama", "PLAYLIST MAMÁ"),
+                                                        disco("playlist_renato", "PLAYLIST RENATO"),
+                                                        disco("playlist_oliver", "PLAYLIST OLIVER")
+                                                    ]
+                                                }
+                                            ]
+                                        }
                                     ]
                                 }
                             ]
                         }
-                    }
+                    ]
                 }
             ]
         }
     }
+
 
 def disco(evento, texto):
     return {
         "type": "Container",
         "direction": "column",
         "alignItems": "center",
-        "width": "220dp",
+        "justifyContent": "center",
+        "paddingLeft": "15dp",   # Margen interno para que no se peguen entre sí
+        "paddingRight": "15dp",  # Margen interno para que no se peguen entre sí
+
         "items": [
+            # CÍRCULO GRANDE (Representación del disco de vinilo concéntrico)
             {
-                "type": "Container",
-                "width": "200dp",
-                "height": "200dp",
+                "type": "Frame",
+                "width": "160dp",
+                "height": "160dp",
+                "backgroundColor": "#E6E6E6",
+                "borderRadius": "80dp",
+                "justifyContent": "center",
+                "alignItems": "center",
+
                 "items": [
-                    # DISCO BLANCO (BASE)
+                    # CÍRCULO NEGRO
                     {
                         "type": "Frame",
-                        "width": "180dp", # Un poco más pequeño para dar aire
-                        "height": "180dp",
-                        "backgroundColor": "#F5F5F0",
-                        "borderRadius": "90dp",
-                        "borderWidth": "2dp",
-                        "borderColor": "#000000",
-                        "alignSelf": "center",
-                        "justifyContent": "center", # CENTRA EL HIJO NEGRO
-                        "alignItems": "center",     # CENTRA EL HIJO NEGRO
-                        "item": {
-                            # CÍRCULO NEGRO
-                            "type": "Frame",
-                            "width": "70dp",
-                            "height": "70dp",
-                            "backgroundColor": "#1A1A1A",
-                            "borderRadius": "35dp",
-                            "justifyContent": "center", # CENTRA EL HIJO BLANCO
-                            "alignItems": "center",     # CENTRA EL HIJO BLANCO
-                            "item": {
-                                # PUNTO BLANCO CENTRAL
+                        "width": "80dp",
+                        "height": "80dp",
+                        "backgroundColor": "#000000",
+                        "borderRadius": "40dp",
+                        "justifyContent": "center",
+                        "alignItems": "center",
+
+                        "items": [
+                            # CENTRO BLANCO
+                            {
                                 "type": "Frame",
                                 "width": "20dp",
                                 "height": "20dp",
-                                "backgroundColor": "#F5F5F0",
+                                "backgroundColor": "#E6E6E6",
                                 "borderRadius": "10dp"
                             }
-                        }
-                    },
-                    # NOTA MUSICAL
-                    {
-                        "type": "Text",
-                        "text": "♫",
-                        "fontSize": "40dp",
-                        "color": "#000000",
-                        "position": "absolute",
-                        "right": "15dp",
-                        "top": "0dp"
+                        ]
                     }
                 ]
             },
-            # BOTÓN
+
+            # BOTÓN / TEXTO (Alineado justo debajo del círculo)
             {
                 "type": "TouchWrapper",
                 "onPress": {
@@ -136,22 +145,25 @@ def disco(evento, texto):
                 },
                 "item": {
                     "type": "Frame",
-                    "width": "180dp",
+                    "width": "160dp",
                     "height": "50dp",
-                    "backgroundColor": "#D6EAF8",
+                    "backgroundColor": "#CFE3E8",
                     "borderRadius": "25dp",
-                    "marginTop": "20dp",
-                    "item": {
-                        "type": "Text",
-                        "text": texto,
-                        "fontSize": "14dp",
-                        "color": "#005073",
-                        "fontWeight": "bold",
-                        "textAlign": "center",
-                        "textAlignVertical": "center",
-                        "width": "100%",
-                        "height": "100%"
-                    }
+                    "marginTop": "15dp", # Espacio ideal entre el disco y su botón
+                    "justifyContent": "center",
+                    "alignItems": "center",
+
+                    "items": [
+                        {
+                            "type": "Text",
+                            "text": texto,
+                            "fontSize": "14dp", # Ajustado ligeramente para asegurar que quepa bien en pantallas pequeñas
+                            "color": "#0E5678",
+                            "textAlign": "center",
+                            "fontWeight": "bold",
+                            "width": "100%"
+                        }
+                    ]
                 }
             }
         ]
