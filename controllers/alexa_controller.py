@@ -138,7 +138,7 @@ def manejar_request(data):
 
             # Diccionario con tus IDs de 22 caracteres
             playlists = {
-                "playlist_mama": "0KQyC28P9808r0oKKNgHvp",
+                "playlist_mama": "6s4aGjq9b42OP4nMGNCLUu",
                 "playlist_renato": "2U7tqVQDraESQSOTKgVSKA",
                 "playlist_oliver": "3PDxZ7MCDaJ07Kvz47MQIq"
             }
