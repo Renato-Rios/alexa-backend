@@ -86,29 +86,96 @@ def buscar_palabra_aprendizaje(patient_id, threshold):
     return None
 
 def obtener_siguiente_palabra(patient_id, session_attributes):
-    """Aplica el algoritmo de rotación 2-1 basándose en el contador de la sesión."""
+    """
+    Aplica el patrón 2-1 basándose en el promedio histórico de intentos.
+    Garantiza que ninguna palabra se repita hasta haber recorrido todo el vocabulario.
+    """
     conn = get_db_connection()
     cursor = conn.cursor()
+    
+    # 1. Obtener el umbral del paciente
     cursor.execute("SELECT target_threshold FROM caregiver_config WHERE patient_id = %s", (patient_id,))
     res = cursor.fetchone()
     threshold = res[0] if res else 75.0
+    
+    # 2. Obtener TODAS las palabras asignadas al paciente con su PROMEDIO de acierto histórico
+    cursor.execute("""
+        SELECT w.id, w.word, w.phonetic, i.url, AVG(COALESCE(a.accuracy_percentage, 0)) as promedio_acierto
+        FROM words w
+        JOIN images i ON w.id = i.word_id
+        LEFT JOIN patient_attempts a ON w.id = a.word_id AND a.patient_id = %s
+        WHERE i.patient_id = %s
+        GROUP BY w.id, w.word, w.phonetic, i.url;
+    """, (patient_id, patient_id))
+    
+    todas_las_palabras = cursor.fetchall()
     cursor.close()
     conn.close()
     
-    contador = session_attributes.get("contador_palabras", 1)
+    if not todas_las_palabras:
+        return None
+
+    # 3. Recuperar el historial de palabras ya vistas en esta ronda desde la sesión de Alexa
+    vistas = session_attributes.get("palabras_vistas_historico", [])
     
-    # Cada 3 palabras toca una de REFUERZO (Dominada)
-    if contador % 3 == 0:
-        palabra = buscar_palabra_dominada(patient_id, threshold)
-        if not palabra:  # Fallback si el paciente no tiene palabras dominadas aún
-            palabra = buscar_palabra_aprendizaje(patient_id, threshold)
-    else:
-        # Las otras 2 veces toca palabra de APRENDIZAJE
-        palabra = buscar_palabra_aprendizaje(patient_id, threshold)
-        if not palabra:  # Fallback si ya dominó absolutamente todo el vocabulario
-            palabra = buscar_palabra_dominada(patient_id, threshold)
+    # Si ya vimos todas las palabras de la BD, reiniciamos la lista negra para una nueva ronda
+    if len(vistas) >= len(todas_las_palabras):
+        vistas = []
+        session_attributes["palabras_vistas_historico"] = []
+
+    # 4. Clasificar las palabras DISPONIBLES (filtrando las que ya se vieron)
+    dificiles_disponibles = []
+    faciles_disponibles = []
+    
+    for p in todas_las_palabras:
+        p_id = p[0]
+        # Si la palabra ya fue vista en este ciclo, la ignoramos temporalmente
+        if p_id in vistas:
+            continue
             
-    return palabra
+        # Formateamos el diccionario de la palabra
+        p_dict = {"id": p_id, "word": p[1], "phonetic": p[2], "image": p[3], "promedio": float(p[4])}
+        
+        # Clasificación por promedio histórico vs umbral esperado
+        # Si no tiene intentos (promedio 0) o su promedio es menor al umbral -> Dificil / Aprendizaje
+        if p_dict["promedio"] < threshold:
+            dificiles_disponibles.append(p_dict)
+        else:
+            faciles_disponibles.append(p_dict)
+
+    # 5. Determinar qué tipo de palabra toca según el patrón (2 difíciles, 1 fácil)
+    contador = session_attributes.get("contador_palabras", 1)
+    toca_facil = (contador % 3 == 0)
+    
+    palabra_elegida = None
+
+    if toca_facil:
+        # Toca palabra fácil (Refuerzo)
+        if faciles_disponibles:
+            # Seleccionamos la que tenga mejor promedio o una al azar de las fáciles disponibles
+            palabra_elegida = faciles_disponibles[np.random.choice(len(faciles_disponibles))]
+        else:
+            # Fallback: Si no hay fáciles sin ver, agarramos de las difíciles
+            if dificiles_disponibles:
+                palabra_elegida = dificiles_disponibles[np.random.choice(len(dificiles_disponibles))]
+    else:
+        # Toca palabra difícil (Aprendizaje/Prioridad)
+        if  dificiles_disponibles:
+            # Prioridad: Podemos elegir la que tenga el peor promedio histórico para machacarla más
+            # O simplemente una aleatoria de la bolsa de pendientes
+            palabra_elegida = dificiles_disponibles[np.random.choice(len(dificiles_disponibles))]
+        else:
+            # Fallback: Si el paciente es un genio y no tiene difíciles pendientes de ver
+            if faciles_disponibles:
+                palabra_elegida = faciles_disponibles[np.random.choice(len(faciles_disponibles))]
+
+    # 6. Si encontramos una palabra, actualizar registros de exclusión en la sesión
+    if palabra_elegida:
+        vistas.append(palabra_elegida["id"])
+        session_attributes["palabras_vistas_historico"] = vistas
+        return palabra_elegida
+        
+    return None
 
 def play_spotify_playlist(token, playlist_id):
     """Envía la orden a la API de Spotify usando el token de vinculación."""
