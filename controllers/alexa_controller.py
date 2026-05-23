@@ -330,7 +330,7 @@ def manejar_request(data):
                                         "type": "object",
                                         "word": siguiente['word'],
                                         "image": siguiente['image'],
-                                        "phonetic": penultimate_gui_fix if 'phonetic' not in siguiente else siguiente['phonetic']
+                                        "phonetic": siguiente.get('phonetic', '')
                                     }
                                 }
                             }],
