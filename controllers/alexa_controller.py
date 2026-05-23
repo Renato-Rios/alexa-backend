@@ -39,52 +39,6 @@ def reconocer_porcentaje(features, archivo_modelo="modelo.dat"):
         print(f"Error en Perceptrón: {e}")
         return 50.0  # Fallback seguro por si el archivo no se encuentra
 
-def buscar_palabra_dominada(patient_id, threshold):
-    """Filtra palabras cuyo último intento registrado superó o igualó el umbral."""
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("""
-        SELECT DISTINCT ON (w.id) w.id, w.word, w.phonetic, i.url, a.accuracy_percentage
-        FROM words w
-        JOIN images i ON w.id = i.word_id
-        LEFT JOIN patient_attempts a ON w.id = a.word_id AND a.patient_id = %s
-        WHERE i.patient_id = %s
-        ORDER BY w.id, a.attempted_at DESC NULLS LAST;
-    """, (patient_id, patient_id))
-    
-    palabras = cursor.fetchall()
-    dominadas = [p for p in palabras if p[4] is not None and p[4] >= threshold]
-    cursor.close()
-    conn.close()
-    
-    if dominadas:
-        elegida = dominadas[np.random.choice(len(dominadas))]
-        return {"id": elegida[0], "word": elegida[1], "phonetic": elegida[2], "image": elegida[3]}
-    return None
-
-def buscar_palabra_aprendizaje(patient_id, threshold):
-    """Filtra palabras que no tienen intentos registrados o están por debajo del umbral."""
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("""
-        SELECT DISTINCT ON (w.id) w.id, w.word, w.phonetic, i.url, a.accuracy_percentage
-        FROM words w
-        JOIN images i ON w.id = i.word_id
-        LEFT JOIN patient_attempts a ON w.id = a.word_id AND a.patient_id = %s
-        WHERE i.patient_id = %s
-        ORDER BY w.id, a.attempted_at DESC NULLS LAST;
-    """, (patient_id, patient_id))
-    
-    palabras = cursor.fetchall()
-    aprendizaje = [p for p in palabras if p[4] is None or p[4] < threshold]
-    cursor.close()
-    conn.close()
-    
-    if aprendizaje:
-        elegida = aprendizaje[np.random.choice(len(aprendizaje))]
-        return {"id": elegida[0], "word": elegida[1], "phonetic": elegida[2], "image": elegida[3]}
-    return None
-
 def obtener_siguiente_palabra(patient_id, session_attributes):
     """
     Aplica el patrón 2-1 basándose en el promedio histórico de intentos.
@@ -137,7 +91,6 @@ def obtener_siguiente_palabra(patient_id, session_attributes):
         p_dict = {"id": p_id, "word": p[1], "phonetic": p[2], "image": p[3], "promedio": float(p[4])}
         
         # Clasificación por promedio histórico vs umbral esperado
-        # Si no tiene intentos (promedio 0) o su promedio es menor al umbral -> Dificil / Aprendizaje
         if p_dict["promedio"] < threshold:
             dificiles_disponibles.append(p_dict)
         else:
@@ -150,22 +103,15 @@ def obtener_siguiente_palabra(patient_id, session_attributes):
     palabra_elegida = None
 
     if toca_facil:
-        # Toca palabra fácil (Refuerzo)
         if faciles_disponibles:
-            # Seleccionamos la que tenga mejor promedio o una al azar de las fáciles disponibles
             palabra_elegida = faciles_disponibles[np.random.choice(len(faciles_disponibles))]
         else:
-            # Fallback: Si no hay fáciles sin ver, agarramos de las difíciles
             if dificiles_disponibles:
                 palabra_elegida = dificiles_disponibles[np.random.choice(len(dificiles_disponibles))]
     else:
-        # Toca palabra difícil (Aprendizaje/Prioridad)
-        if  dificiles_disponibles:
-            # Prioridad: Podemos elegir la que tenga el peor promedio histórico para machacarla más
-            # O simplemente una aleatoria de la bolsa de pendientes
+        if dificiles_disponibles:
             palabra_elegida = dificiles_disponibles[np.random.choice(len(dificiles_disponibles))]
         else:
-            # Fallback: Si el paciente es un genio y no tiene difíciles pendientes de ver
             if faciles_disponibles:
                 palabra_elegida = faciles_disponibles[np.random.choice(len(faciles_disponibles))]
 
@@ -202,7 +148,6 @@ def play_spotify_playlist(token, playlist_id):
 def manejar_request(data):
     tipo = data["request"]["type"]
     
-    # 💥 CRÍTICO: Recuperamos los atributos persistentes que mantiene Alexa en la sesión actual
     session_attributes = data.get("session", {}).get("attributes", {})
     datasources = {}
     patient_id = 1  # ID fijo del paciente asignado (Andrea)
@@ -238,7 +183,6 @@ def manejar_request(data):
         documento = pantalla_principal()
         texto = "Cargando selección"
 
-        # --- LÓGICA DE NAVEGACIÓN ---
         if accion == "aprender":
             texto = "Entrando a aprender"
             documento = learn_gui()
@@ -248,7 +192,6 @@ def manejar_request(data):
             documento = music_gui()
             
         elif accion == "fase1":
-            # 🔄 SE ACTIVA NUESTRA LOGICA DIFUSA Y SELECCIÓN INTELIGENTE
             contenido = obtener_siguiente_palabra(patient_id, session_attributes)
             if contenido:
                 texto = f"Mira la pantalla, ¿puedes decir la palabra {contenido['word']}?"
@@ -261,15 +204,13 @@ def manejar_request(data):
                         "phonetic": contenido['phonetic']
                     }
                 }
-                # 📌 Guardamos los datos de control en la sesión antes de abrir el micrófono
                 session_attributes["palabra_actual_id"] = contenido["id"]
                 session_attributes["palabra_actual_texto"] = contenido["word"]
-                session_attributes["timestamp_inicio"] = time.time()  # Inicia el cronómetro cognitivo
+                session_attributes["timestamp_inicio"] = time.time()
             else:
                 texto = "No encontré contenido configurado en la base de datos."
                 documento = learn_gui()
 
-        # --- LÓGICA DE SPOTIFY ---
         elif accion in ["playlist_mama", "playlist_renato", "playlist_oliver"]:
             access_token = data["context"]["System"]["user"].get("accessToken")
             
@@ -305,7 +246,6 @@ def manejar_request(data):
             
             documento = music_gui()
 
-        # Respuesta unificada para UserEvent (Adjunta los sessionAttributes modificados)
         return jsonify({
             "version": "1.0",
             "sessionAttributes": session_attributes,
@@ -327,12 +267,10 @@ def manejar_request(data):
     if tipo == "IntentRequest":
         intent = data["request"]["intent"]["name"]
         
-        # 🎤 EL MEOLLO: El paciente responde al micrófono (Fase 1 Activa)
         if intent == "RespuestaPalabraIntent":
             slots = data["request"]["intent"].get("slots", {})
             palabra_dicha = slots.get("palabra_usuario", {}).get("value", "")
             
-            # Recuperamos los datos guardados previamente en el paso de pantalla (UserEvent)
             palabra_real_texto = session_attributes.get("palabra_actual_texto")
             palabra_real_id = session_attributes.get("palabra_actual_id")
             timestamp_inicio = session_attributes.get("timestamp_inicio", time.time())
@@ -346,15 +284,12 @@ def manejar_request(data):
                     }
                 })
             
-            # A) EXTRACCIÓN DE MÉTRICAS (FEATURES)
             tiempo_respuesta = time.time() - timestamp_inicio
             score_similitud = Levenshtein.ratio(palabra_real_texto.lower(), palabra_dicha.lower())
             
-            # B) PROCESAR CARACTERÍSTICAS MEDIANTE EL PERCEPTRÓN CONTINUO
             features = [score_similitud, tiempo_respuesta]
             porcentaje = reconocer_porcentaje(features)
             
-            # C) PERSISTENCIA DE RESULTADOS EN LA BASE DE DATOS
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("""
@@ -362,7 +297,6 @@ def manejar_request(data):
                 VALUES (%s, %s, %s, %s, %s)
             """, (patient_id, palabra_real_id, palabra_dicha, porcentaje, tiempo_respuesta))
             
-            # Obtenemos el umbral de exigencia definido por el cuidador para este paciente
             cursor.execute("SELECT target_threshold FROM caregiver_config WHERE patient_id = %s", (patient_id,))
             res = cursor.fetchone()
             threshold = res[0] if res else 75.0
@@ -370,18 +304,17 @@ def manejar_request(data):
             cursor.close()
             conn.close()
             
-            # D) EVALUACIÓN DEL DESEMPEÑO COGNITIVO (TOMA DE DECISIONES)
             if porcentaje >= threshold:
-                # ¡ÉXITO! Incrementamos el contador para avanzar en la secuencia de rotación
+                # Incrementamos el contador para que avance en el patrón 2-1
                 session_attributes["contador_palabras"] = session_attributes.get("contador_palabras", 1) + 1
                 texto_alexa = f"¡Excelente! Conseguiste un {int(porcentaje)} por ciento de acierto. ¡Vamos a la siguiente palabra!"
                 
-                # Cargamos la siguiente palabra inmediatamente
                 siguiente = obtener_siguiente_palabra(patient_id, session_attributes)
                 if siguiente:
+                    # 🛠️ FIJACIÓN CRÍTICA: Guardamos los datos de la nueva palabra en la sesión
                     session_attributes["palabra_actual_id"] = siguiente["id"]
                     session_attributes["palabra_actual_texto"] = siguiente["word"]
-                    session_attributes["timestamp_inicio"] = time.time()  # Reiniciamos cronómetro
+                    session_attributes["timestamp_inicio"] = time.time()  # Reseteamos el cronómetro
                     
                     return jsonify({
                         "version": "1.0",
@@ -404,21 +337,29 @@ def manejar_request(data):
                             "shouldEndSession": False
                         }
                     })
+                else:
+                    # Si ya no quedan palabras en la BD (caso extremo)
+                    return jsonify({
+                        "version": "1.0",
+                        "sessionAttributes": session_attributes,
+                        "response": {
+                            "outputSpeech": {"type": "PlainText", "text": "¡Increíble! Completaste todas las palabras disponibles."},
+                            "shouldEndSession": False
+                        }
+                    })
             else:
-                # REINTENTO: El porcentaje no alcanzó el umbral del cuidador, se repite la palabra
                 texto_alexa = f"Te escuché decir {palabra_dicha}. Tuviste un {int(porcentaje)} por ciento de acierto. Vamos a practicarla de nuevo: Di, {palabra_real_texto}."
-                session_attributes["timestamp_inicio"] = time.time()  # Reiniciamos tiempo para el reintento
+                session_attributes["timestamp_inicio"] = time.time()
                 
                 return jsonify({
                     "version": "1.0",
                     "sessionAttributes": session_attributes,
                     "response": {
                         "outputSpeech": {"type": "PlainText", "text": texto_alexa},
-                        "shouldEndSession": False  # Deja el micrófono abierto manteniendo el mismo APL en pantalla
+                        "shouldEndSession": False
                     }
                 })
 
-        # --- INTENTS DE NAVEGACIÓN Y AYUDA ANTERIORES ---
         if intent == "HablarIntent":
             slots = data["request"]["intent"].get("slots", {})
             accion = slots.get("accion", {}).get("value")
@@ -438,7 +379,7 @@ def manejar_request(data):
                 "response": {
                     "outputSpeech": {
                         "type": "PlainText",
-                        "text": "En esta skill puedes aprender sobre nuestro lenguaje y escuchar música, con solo decir Alexa, vamos a aprender o Alexa, vamos a escuchar música se activarán las funciones correspondientes"
+                        "text": "En esta skill puedes aprender sobre nuestro lenguaje y escuchar música..."
                     },
                     "shouldEndSession": False
                 }
@@ -456,7 +397,6 @@ def manejar_request(data):
                 }
             })
 
-    # Fallback definitivo en caso de solicitudes no mapeadas
     return jsonify({
         "version": "1.0",
         "response": {
