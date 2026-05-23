@@ -1,11 +1,114 @@
+import time
+import requests
+import psycopg2
+import numpy as np
+import Levenshtein  # Recuerda instalarlo en tu entorno/Render: pip install python-Levenshtein
 from flask import jsonify
 from views.apl_templates import pantalla_principal
 from views.learn.home_learn import learn_gui
 from views.learn.fase_1 import fase_1_gui
 from views.music.home_music import music_gui
 from services.alexa_service import procesar_accion
-import psycopg2
-import requests
+
+# =====================================================================
+# 🛠️ FUNCIONES AUXILIARES: CONEXIÓN, PERCEPTRÓN Y LOGICA DE APRENDIZAJE
+# =====================================================================
+
+def get_db_connection():
+    """Centraliza la conexión a PostgreSQL para evitar repetir credenciales."""
+    return psycopg2.connect(
+        host="dpg-d7klgul7vvec73cebok0-a.oregon-postgres.render.com",
+        database="asistentec",
+        user="admin",
+        password="HGjBPcY5YLIWaVtBNzWsvtmns6NAO8fN",
+        port=5432
+    )
+
+def reconocer_porcentaje(features, archivo_modelo="modelo.dat"):
+    """Evalúa las características mediante el perceptrón continuo con Sigmoide."""
+    try:
+        with open(archivo_modelo, "r") as f:
+            lineas = f.readlines()
+            w = np.array(list(map(float, lineas[0].split())))
+            theta = float(lineas[1])
+        
+        h = np.dot(features, w) - theta  
+        porcentaje_acierto = 1 / (1 + np.exp(-h))
+        return float(porcentaje_acierto * 100)
+    except Exception as e:
+        print(f"Error en Perceptrón: {e}")
+        return 50.0  # Fallback seguro por si el archivo no se encuentra
+
+def buscar_palabra_dominada(patient_id, threshold):
+    """Filtra palabras cuyo último intento registrado superó o igualó el umbral."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT DISTINCT ON (w.id) w.id, w.word, w.phonetic, i.url, a.accuracy_percentage
+        FROM words w
+        JOIN images i ON w.id = i.word_id
+        LEFT JOIN patient_attempts a ON w.id = a.word_id AND a.patient_id = %s
+        WHERE i.patient_id = %s
+        ORDER BY w.id, a.attempted_at DESC NULLS LAST;
+    """, (patient_id, patient_id))
+    
+    palabras = cursor.fetchall()
+    dominadas = [p for p in palabras if p[4] is not None and p[4] >= threshold]
+    cursor.close()
+    conn.close()
+    
+    if dominadas:
+        elegida = dominadas[np.random.choice(len(dominadas))]
+        return {"id": elegida[0], "word": elegida[1], "phonetic": elegida[2], "image": elegida[3]}
+    return None
+
+def buscar_palabra_aprendizaje(patient_id, threshold):
+    """Filtra palabras que no tienen intentos registrados o están por debajo del umbral."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT DISTINCT ON (w.id) w.id, w.word, w.phonetic, i.url, a.accuracy_percentage
+        FROM words w
+        JOIN images i ON w.id = i.word_id
+        LEFT JOIN patient_attempts a ON w.id = a.word_id AND a.patient_id = %s
+        WHERE i.patient_id = %s
+        ORDER BY w.id, a.attempted_at DESC NULLS LAST;
+    """, (patient_id, patient_id))
+    
+    palabras = cursor.fetchall()
+    aprendizaje = [p for p in palabras if p[4] is None or p[4] < threshold]
+    cursor.close()
+    conn.close()
+    
+    if aprendizaje:
+        elegida = aprendizaje[np.random.choice(len(aprendizaje))]
+        return {"id": elegida[0], "word": elegida[1], "phonetic": elegida[2], "image": elegida[3]}
+    return None
+
+def obtener_siguiente_palabra(patient_id, session_attributes):
+    """Aplica el algoritmo de rotación 2-1 basándose en el contador de la sesión."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT target_threshold FROM caregiver_config WHERE patient_id = %s", (patient_id,))
+    res = cursor.fetchone()
+    threshold = res[0] if res else 75.0
+    cursor.close()
+    conn.close()
+    
+    contador = session_attributes.get("contador_palabras", 1)
+    
+    # Cada 3 palabras toca una de REFUERZO (Dominada)
+    if contador % 3 == 0:
+        palabra = buscar_palabra_dominada(patient_id, threshold)
+        if not palabra:  # Fallback si el paciente no tiene palabras dominadas aún
+            palabra = buscar_palabra_aprendizaje(patient_id, threshold)
+    else:
+        # Las otras 2 veces toca palabra de APRENDIZAJE
+        palabra = buscar_palabra_aprendizaje(patient_id, threshold)
+        if not palabra:  # Fallback si ya dominó absolutamente todo el vocabulario
+            palabra = buscar_palabra_dominada(patient_id, threshold)
+            
+    return palabra
 
 def play_spotify_playlist(token, playlist_id):
     """Envía la orden a la API de Spotify usando el token de vinculación."""
@@ -17,56 +120,29 @@ def play_spotify_playlist(token, playlist_id):
     data = {
         "context_uri": f"spotify:playlist:{playlist_id}"
     }
-    
     try:
-        # Spotify responde con un 204 si todo sale bien
         response = requests.put(url, headers=headers, json=data)
         return response.status_code
     except Exception as e:
         print(f"Error en Spotify API: {e}")
         return 500
 
-#funcion encargada de obtener informacion de la base de datos para fase 1
-def get_learning_content():
-    conn = psycopg2.connect(
-        host="dpg-d7klgul7vvec73cebok0-a.oregon-postgres.render.com",
-        database="asistentec",
-        user="admin",
-        password="HGjBPcY5YLIWaVtBNzWsvtmns6NAO8fN",
-        port=5432
-    )
 
-    cursor = conn.cursor()
-
-    cursor.execute("""
-        SELECT w.word, w.phonetic, i.url
-        FROM words w
-        JOIN images i ON w.id = i.word_id
-        WHERE i.patient_id = 1
-        ORDER BY RANDOM()
-        LIMIT 1;
-    """)
-
-    result = cursor.fetchone()
-
-    cursor.close()
-    conn.close()
-
-    if result:
-        return {
-            "word": result[0],
-            "phonetic": result[1],
-            "image": result[2]
-        }
-    else:
-        return None
+# =====================================================================
+# 🧠 CEREBRO PRINCIPAL: MANEJAR REQUEST
+# =====================================================================
 
 def manejar_request(data):
-    # Extraer información básica
     tipo = data["request"]["type"]
+    
+    # 💥 CRÍTICO: Recuperamos los atributos persistentes que mantiene Alexa en la sesión actual
+    session_attributes = data.get("session", {}).get("attributes", {})
     datasources = {}
+    patient_id = 1  # ID fijo del paciente asignado (Andrea)
 
-    # Caso 1: Inicio de la Skill
+    # -----------------------------------------------------------------
+    # CASO 1: Inicio de la Skill (LaunchRequest)
+    # -----------------------------------------------------------------
     if tipo == "LaunchRequest":
         return jsonify({
             "version": "1.0",
@@ -85,7 +161,9 @@ def manejar_request(data):
             }
         })
 
-    # Caso 2: Interacción con botones (UserEvent)
+    # -----------------------------------------------------------------
+    # CASO 2: Interacción con botones de la pantalla (UserEvent)
+    # -----------------------------------------------------------------
     if tipo == "Alexa.Presentation.APL.UserEvent":
         argumentos = data["request"].get("arguments", [])
         accion = argumentos[0] if argumentos else None
@@ -103,9 +181,10 @@ def manejar_request(data):
             documento = music_gui()
             
         elif accion == "fase1":
-            contenido = get_learning_content()
+            # 🔄 SE ACTIVA NUESTRA LOGICA DIFUSA Y SELECCIÓN INTELIGENTE
+            contenido = obtener_siguiente_palabra(patient_id, session_attributes)
             if contenido:
-                texto = f"La palabra es {contenido['word']}"
+                texto = f"Mira la pantalla, ¿puedes decir la palabra {contenido['word']}?"
                 documento = fase_1_gui()
                 datasources = {
                     "datosFase": {
@@ -115,15 +194,18 @@ def manejar_request(data):
                         "phonetic": contenido['phonetic']
                     }
                 }
+                # 📌 Guardamos los datos de control en la sesión antes de abrir el micrófono
+                session_attributes["palabra_actual_id"] = contenido["id"]
+                session_attributes["palabra_actual_texto"] = contenido["word"]
+                session_attributes["timestamp_inicio"] = time.time()  # Inicia el cronómetro cognitivo
             else:
-                texto = "No encontré contenido"
+                texto = "No encontré contenido configurado en la base de datos."
                 documento = learn_gui()
 
-        # --- 🔷 LÓGICA DE SPOTIFY ---
+        # --- LÓGICA DE SPOTIFY ---
         elif accion in ["playlist_mama", "playlist_renato", "playlist_oliver"]:
             access_token = data["context"]["System"]["user"].get("accessToken")
             
-            # Si no hay vinculación, mandamos la tarjeta especial
             if not access_token:
                 return jsonify({
                     "version": "1.0",
@@ -136,7 +218,6 @@ def manejar_request(data):
                     }
                 })
 
-            # Diccionario con tus IDs de 22 caracteres
             playlists = {
                 "playlist_mama": "6s4aGjq9b42OP4nMGNCLUu",
                 "playlist_renato": "2U7tqVQDraESQSOTKgVSKA",
@@ -157,9 +238,10 @@ def manejar_request(data):
             
             documento = music_gui()
 
-        # Respuesta para UserEvent
+        # Respuesta unificada para UserEvent (Adjunta los sessionAttributes modificados)
         return jsonify({
             "version": "1.0",
+            "sessionAttributes": session_attributes,
             "response": {
                 "outputSpeech": {"type": "PlainText", "text": texto},
                 "directives": [{
@@ -172,10 +254,104 @@ def manejar_request(data):
             }
         })
 
-    # Caso 3: Comandos de voz (IntentRequest)
+    # -----------------------------------------------------------------
+    # CASO 3: Procesamiento por comandos de voz (IntentRequest)
+    # -----------------------------------------------------------------
     if tipo == "IntentRequest":
         intent = data["request"]["intent"]["name"]
         
+        # 🎤 EL MEOLLO: El paciente responde al micrófono (Fase 1 Activa)
+        if intent == "RespuestaPalabraIntent":
+            slots = data["request"]["intent"].get("slots", {})
+            palabra_dicha = slots.get("palabra_usuario", {}).get("value", "")
+            
+            # Recuperamos los datos guardados previamente en el paso de pantalla (UserEvent)
+            palabra_real_texto = session_attributes.get("palabra_actual_texto")
+            palabra_real_id = session_attributes.get("palabra_actual_id")
+            timestamp_inicio = session_attributes.get("timestamp_inicio", time.time())
+            
+            if not palabra_real_texto:
+                return jsonify({
+                    "version": "1.0",
+                    "response": {
+                        "outputSpeech": {"type": "PlainText", "text": "Lo siento, perdí el hilo de la práctica. Regresa al menú principal."},
+                        "shouldEndSession": False
+                    }
+                })
+            
+            # A) EXTRACCIÓN DE MÉTRICAS (FEATURES)
+            tiempo_respuesta = time.time() - timestamp_inicio
+            score_similitud = Levenshtein.ratio(palabra_real_texto.lower(), palabra_dicha.lower())
+            
+            # B) PROCESAR CARACTERÍSTICAS MEDIANTE EL PERCEPTRÓN CONTINUO
+            features = [score_similitud, tiempo_respuesta]
+            porcentaje = reconocer_porcentaje(features)
+            
+            # C) PERSISTENCIA DE RESULTADOS EN LA BASE DE DATOS
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO patient_attempts (patient_id, word_id, word_said, accuracy_percentage, response_time)
+                VALUES (%s, %s, %s, %s, %s)
+            """, (patient_id, palabra_real_id, palabra_dicha, porcentaje, tiempo_respuesta))
+            
+            # Obtenemos el umbral de exigencia definido por el cuidador para este paciente
+            cursor.execute("SELECT target_threshold FROM caregiver_config WHERE patient_id = %s", (patient_id,))
+            res = cursor.fetchone()
+            threshold = res[0] if res else 75.0
+            conn.commit()
+            cursor.close()
+            conn.close()
+            
+            # D) EVALUACIÓN DEL DESEMPEÑO COGNITIVO (TOMA DE DECISIONES)
+            if porcentaje >= threshold:
+                # ¡ÉXITO! Incrementamos el contador para avanzar en la secuencia de rotación
+                session_attributes["contador_palabras"] = session_attributes.get("contador_palabras", 1) + 1
+                texto_alexa = f"¡Excelente! Conseguiste un {int(porcentaje)} por ciento de acierto. ¡Vamos a la siguiente palabra!"
+                
+                # Cargamos la siguiente palabra inmediatamente
+                siguiente = obtener_siguiente_palabra(patient_id, session_attributes)
+                if siguiente:
+                    session_attributes["palabra_actual_id"] = siguiente["id"]
+                    session_attributes["palabra_actual_texto"] = siguiente["word"]
+                    session_attributes["timestamp_inicio"] = time.time()  # Reiniciamos cronómetro
+                    
+                    return jsonify({
+                        "version": "1.0",
+                        "sessionAttributes": session_attributes,
+                        "response": {
+                            "outputSpeech": {"type": "PlainText", "text": texto_alexa},
+                            "directives": [{
+                                "type": "Alexa.Presentation.APL.RenderDocument",
+                                "token": "fase_token",
+                                "document": fase_1_gui(),
+                                "datasources": {
+                                    "datosFase": {
+                                        "type": "object",
+                                        "word": siguiente['word'],
+                                        "image": siguiente['image'],
+                                        "phonetic": penultimate_gui_fix if 'phonetic' not in siguiente else siguiente['phonetic']
+                                    }
+                                }
+                            }],
+                            "shouldEndSession": False
+                        }
+                    })
+            else:
+                # REINTENTO: El porcentaje no alcanzó el umbral del cuidador, se repite la palabra
+                texto_alexa = f"Te escuché decir {palabra_dicha}. Tuviste un {int(porcentaje)} por ciento de acierto. Vamos a practicarla de nuevo: Di, {palabra_real_texto}."
+                session_attributes["timestamp_inicio"] = time.time()  # Reiniciamos tiempo para el reintento
+                
+                return jsonify({
+                    "version": "1.0",
+                    "sessionAttributes": session_attributes,
+                    "response": {
+                        "outputSpeech": {"type": "PlainText", "text": texto_alexa},
+                        "shouldEndSession": False  # Deja el micrófono abierto manteniendo el mismo APL en pantalla
+                    }
+                })
+
+        # --- INTENTS DE NAVEGACIÓN Y AYUDA ANTERIORES ---
         if intent == "HablarIntent":
             slots = data["request"]["intent"].get("slots", {})
             accion = slots.get("accion", {}).get("value")
@@ -188,24 +364,20 @@ def manejar_request(data):
                     "shouldEndSession": False
                 }
             })
-
-        # ... (Help, Cancel, Stop intents igual que antes)
         
-    # Ayuda
         if intent == "AMAZON.HelpIntent":
             return jsonify({
                 "version": "1.0",
                 "response": {
                     "outputSpeech": {
                         "type": "PlainText",
-                        "text": "En esta skill puedes aprender sobre nuestro lenguaje y escuchar música, con solo decir Alexa, vamos a aprender"+
-                            "o Alexa, vamos a escuchar música se activarán las funciones correspondientes"
+                        "text": "En esta skill puedes aprender sobre nuestro lenguaje y escuchar música, con solo decir Alexa, vamos a aprender o Alexa, vamos a escuchar música se activarán las funciones correspondientes"
                     },
                     "shouldEndSession": False
                 }
             })
-        #Salida
-        if intent == "AMAZON.CancelIntent" or intent == "AMAZON.StopIntent":
+            
+        if intent in ["AMAZON.CancelIntent", "AMAZON.StopIntent"]:
             return jsonify({
                 "version": "1.0",
                 "response": {
@@ -217,10 +389,11 @@ def manejar_request(data):
                 }
             })
 
+    # Fallback definitivo en caso de solicitudes no mapeadas
     return jsonify({
         "version": "1.0",
         "response": {
-            "outputSpeech": {"type": "PlainText", "text": "Lo siento, hubo un error"},
+            "outputSpeech": {"type": "PlainText", "text": "Lo siento, opción no reconocida por Asistente C."},
             "shouldEndSession": False
         }
     })
