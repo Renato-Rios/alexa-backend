@@ -6,23 +6,24 @@ def fase_1_gui():
             "parameters": ["payload"],
             "items": [
                 {
-                    # 1. Usamos tu estructura original que SÍ funciona: Frame con backgroundColor sólido
+                    # 1. Estructura raíz sólida con Frame
                     "type": "Frame",
                     "width": "100%",
                     "height": "100%",
-                    "backgroundColor": "#11366b", # Azul oscuro moderno (puedes cambiarlo a #147AB0 si quieres el anterior)
+                    "backgroundColor": "#0052FF", 
                     "item": {
                         "type": "Container",
                         "width": "100%",
                         "height": "100%",
                         "items": [
-                            # CONTENIDO CENTRAL (Imagen y Textos)
+                            # CONTENIDO CENTRAL (Imagen y Textos más grandes)
                             {
                                 "type": "Container",
                                 "grow": 1,
                                 "justifyContent": "center",
                                 "alignItems": "center",
                                 "paddingTop": "20dp",
+                                "paddingBottom": "15dp", # Espacio extra abajo para balancear el texto grande
                                 "items": [
                                     # 2. Tarjeta blanca para resaltar la imagen
                                     {
@@ -44,26 +45,31 @@ def fase_1_gui():
                                             "borderRadius": "24dp"
                                         }
                                     },
-                                    # 3. Palabra Principal estilizada
+                                    # 3. Palabra Principal (¡Más grande y separada!)
                                     {
                                         "type": "Text",
                                         "text": "${payload.datosFase.word}",
-                                        "fontSize": "64dp",
-                                        "fontWeight": "800",
+                                        "fontSize": "64dp",         # Modificado: Antes 54dp
+                                        "fontWeight": "900",         # Modificado: Más pesada y legible
                                         "color": "#FFFFFF",
-                                        "marginTop": "32dp",
-                                        "shadowColor": "#000000",
-                                        "shadowOffset": {"width": 0, "height": 2},
-                                        "shadowRadius": "4dp"
+                                        "marginTop": "32dp",        # Modificado: Más separación de la tarjeta
+                                        # --- TRUCO PARA EL BORDE DE COLOR ---
+                                        "shadowColor": "#FF0000",   # Color del borde (Negro en este caso)
+                                        "shadowOffset": {
+                                            "width": 0, 
+                                            "height": 0             # Centrado para que abrace toda la letra
+                                        },
+                                        "shadowRadius": "4dp",      # Grosor del contorno (ajústalo a tu gusto, por ejemplo 2dp o 4dp)
+                                        "shadowOpacity": 1.0        # Totalmente sólido para que parezca borde y no sombra difuminada
                                     },
-                                    # 4. Texto fonético
+                                    # 4. Texto fonético (¡Más grande!)
                                     {
                                         "type": "Text",
                                         "text": "${payload.datosFase.phonetic}",
-                                        "fontSize": "34dp",
+                                        "fontSize": "32dp",         # Modificado: Antes 26dp
                                         "color": "#E0E0E0",
                                         "fontStyle": "italic",
-                                        "marginTop": "4dp",
+                                        "marginTop": "8dp",         # Modificado: Más aire con la palabra principal
                                         "fontWeight": "300"
                                     }
                                 ]
@@ -98,7 +104,7 @@ def fase_1_gui():
                                                 "text": "MENÚ",
                                                 "color": "white",
                                                 "fontWeight": "700",
-                                                "fontSize": "22dp"
+                                                "fontSize": "18dp"
                                             }
                                         }
                                     },
@@ -122,7 +128,7 @@ def fase_1_gui():
                                                 "text": "SIGUIENTE",
                                                 "color": "#001e3d",
                                                 "fontWeight": "700",
-                                                "fontSize": "22dp"
+                                                "fontSize": "18dp"
                                             }
                                         }
                                     }
