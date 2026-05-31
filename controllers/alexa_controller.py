@@ -17,10 +17,10 @@ from services.alexa_service import procesar_accion
 def get_db_connection():
     """Centraliza la conexión a PostgreSQL para evitar repetir credenciales."""
     return psycopg2.connect(
-        host="dpg-d7klgul7vvec73cebok0-a.oregon-postgres.render.com",
-        database="asistentec",
-        user="admin",
-        password="HGjBPcY5YLIWaVtBNzWsvtmns6NAO8fN",
+        host="dpg-d8e7pme8bjmc73asb3p0-a.oregon-postgres.render.com",
+        database="asistentec_ev22",
+        user="renato",
+        password="oXjjvt32e0qErXXoeJtpPKqPlZqAULCz",
         port=5432
     )
 
