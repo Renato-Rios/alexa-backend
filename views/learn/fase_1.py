@@ -28,10 +28,10 @@ def fase_1_gui():
                                     # 2. Tarjeta blanca para resaltar la imagen
                                     {
                                         "type": "Frame",
-                                        "width": "600dp",
-                                        "height": "400dp",
+                                        "width": "520dp",
+                                        "height": "350dp",
                                         "borderRadius": "24dp",
-                                        "backgroundColor": "#FFFFFF",
+                                        "backgroundColor": "#FFFFFF00",
                                         "shadowColor": "#FFD037",
                                         "shadowOffset": {"width": 0, "height": 8},
                                         "shadowRadius": "12dp",
