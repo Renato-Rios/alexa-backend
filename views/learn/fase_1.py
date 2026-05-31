@@ -28,11 +28,11 @@ def fase_1_gui():
                                     # 2. Tarjeta blanca para resaltar la imagen
                                     {
                                         "type": "Frame",
-                                        "width": "420dp",
-                                        "height": "280dp",
+                                        "width": "600dp",
+                                        "height": "400dp",
                                         "borderRadius": "24dp",
                                         "backgroundColor": "#FFFFFF",
-                                        "shadowColor": "#000000",
+                                        "shadowColor": "#FFD037",
                                         "shadowOffset": {"width": 0, "height": 8},
                                         "shadowRadius": "12dp",
                                         "shadowOpacity": 0.3,
@@ -52,7 +52,7 @@ def fase_1_gui():
                                         "fontSize": "64dp",         # Modificado: Antes 54dp
                                         "fontWeight": "900",         # Modificado: Más pesada y legible
                                         "color": "#FFFFFF",
-                                        "marginTop": "32dp",        # Modificado: Más separación de la tarjeta
+                                        "marginTop": "30dp",        # Modificado: Más separación de la tarjeta
                                         # --- TRUCO PARA EL BORDE DE COLOR ---
                                         "shadowColor": "#FF0000",   # Color del borde (Negro en este caso)
                                         "shadowOffset": {
