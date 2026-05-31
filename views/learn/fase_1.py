@@ -9,90 +9,128 @@ def fase_1_gui():
                     "type": "Frame",
                     "width": "100%",
                     "height": "100%",
-                    "backgroundColor": "#147AB0",
+                    # 1. Gradiente de fondo moderno para un look premium
+                    "background": {
+                        "type": "Gradient",
+                        "colorRange": ["#1e3c72", "#2a5298"],
+                        "angle": 135
+                    },
                     "item": {
                         "type": "Container",
                         "width": "100%",
                         "height": "100%",
                         "items": [
-                            # CONTENIDO CENTRAL (Imagen y Texto)
+                            # CONTENIDO CENTRAL (Contenedor Estilizado, Imagen y Textos)
                             {
                                 "type": "Container",
-                                "grow": 1, # Esto empuja los botones hacia abajo
+                                "grow": 1,
                                 "justifyContent": "center",
                                 "alignItems": "center",
+                                "paddingTop": "20dp",
                                 "items": [
+                                    # 2. Tarjeta con bordes redondeados para envolver la imagen
                                     {
-                                        "type": "Image",
-                                        "source": "${payload.datosFase.image}",
-                                        "width": "500dp",
-                                        "height": "350dp",
-                                        "scale": "best-fit"
+                                        "type": "Frame",
+                                        "width": "420dp",
+                                        "height": "280dp",
+                                        "borderRadius": "24dp",
+                                        "backgroundColor": "#FFFFFF",
+                                        "shadowColor": "#000000",
+                                        "shadowOffset": {"width": 0, "height": 8},
+                                        "shadowRadius": "12dp",
+                                        "shadowOpacity": 0.3,
+                                        "item": {
+                                            "type": "Image",
+                                            "source": "${payload.datosFase.image}",
+                                            "width": "100%",
+                                            "height": "100%",
+                                            "scale": "best-fill",
+                                            "borderRadius": "24dp"
+                                        }
                                     },
+                                    # 3. Palabra Principal estilizada
                                     {
                                         "type": "Text",
                                         "text": "${payload.datosFase.word}",
-                                        "fontSize": "60dp",
-                                        "fontWeight": "700",
+                                        "fontSize": "54dp",
+                                        "fontWeight": "800",
                                         "color": "#FFFFFF",
-                                        "marginTop": "10dp"
+                                        "marginTop": "24dp",
+                                        "shadowColor": "#000000",
+                                        "shadowOffset": {"width": 0, "height": 2},
+                                        "shadowRadius": "4dp"
                                     },
+                                    # 4. Texto fonético más legible y estilizado
                                     {
                                         "type": "Text",
                                         "text": "${payload.datosFase.phonetic}",
-                                        "fontSize": "30dp",
-                                        "color": "#CCCCCC",
-                                        "fontStyle": "italic"
+                                        "fontSize": "26dp",
+                                        "color": "#E0E0E0",
+                                        "fontStyle": "italic",
+                                        "marginTop": "4dp",
+                                        "fontWeight": "300"
                                     }
                                 ]
                             },
-                            # BARRA DE BOTONES INFERIOR
+                            # BARRA DE BOTONES INFERIOR ESTILIZADA
                             {
                                 "type": "Container",
                                 "direction": "row",
                                 "width": "100%",
                                 "paddingLeft": "40dp",
                                 "paddingRight": "40dp",
-                                "paddingBottom": "20dp",
+                                "paddingBottom": "30dp",
                                 "justifyContent": "spaceBetween",
                                 "items": [
-                                    # BOTÓN ATRÁS
+                                    # BOTÓN ATRÁS (Modernizado)
                                     {
                                         "type": "TouchWrapper",
                                         "onPress": {
                                             "type": "SendEvent",
-                                            "arguments": ["aprender"] # Regresa al home de aprender
+                                            "arguments": ["aprender"]
                                         },
                                         "item": {
                                             "type": "Frame",
-                                            "backgroundColor": "#16BA00",
-                                            "borderRadius": "10dp",
-                                            "padding": "15dp",
+                                            "backgroundColor": "#e63946", # Un rojo/coral sutil en vez de verde chillón
+                                            "borderRadius": "25dp",
+                                            "paddingLeft": "30dp",
+                                            "paddingRight": "30dp",
+                                            "paddingTop": "12dp",
+                                            "paddingBottom": "12dp",
+                                            "shadowColor": "#000000",
+                                            "shadowRadius": "4dp",
                                             "item": {
                                                 "type": "Text",
-                                                "text": "ATRÁS",
+                                                "text": "🔀 MENÚ",
                                                 "color": "white",
-                                                "fontWeight": "bold"
+                                                "fontWeight": "700",
+                                                "fontSize": "18dp"
                                             }
                                         }
                                     },
-                                    # BOTÓN CAMBIAR (SIGUIENTE)
+                                    # BOTÓN CAMBIAR / SIGUIENTE (Modernizado)
                                     {
                                         "type": "TouchWrapper",
                                         "onPress": {
                                             "type": "SendEvent",
-                                            "arguments": ["fase1"] # Recarga la misma fase (traerá otra random)
+                                            "arguments": ["fase1"]
                                         },
                                         "item": {
                                             "type": "Frame",
-                                            "backgroundColor": "#3400B8",
-                                            "borderRadius": "10dp",
-                                            "padding": "15dp",
+                                            "backgroundColor": "#4cc9f0", # Un celeste eléctrico moderno e intuitivo
+                                            "borderRadius": "25dp",
+                                            "paddingLeft": "30dp",
+                                            "paddingRight": "30dp",
+                                            "paddingTop": "12dp",
+                                            "paddingBottom": "12dp",
+                                            "shadowColor": "#000000",
+                                            "shadowRadius": "4dp",
                                             "item": {
                                                 "type": "Text",
-                                                "text": "CAMBIAR",
-                                                "color": "white",
-                                                "fontWeight": "bold"
+                                                "text": "SIGUIENTE ➡️",
+                                                "color": "#001e3d", # Texto oscuro para contrastar con el celeste claro
+                                                "fontWeight": "700",
+                                                "fontSize": "18dp"
                                             }
                                         }
                                     }
