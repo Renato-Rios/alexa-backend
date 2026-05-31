@@ -59,7 +59,7 @@ def fase_1_gui():
                                             "width": 0, 
                                             "height": 0             # Centrado para que abrace toda la letra
                                         },
-                                        "shadowRadius": "4dp",      # Grosor del contorno (ajústalo a tu gusto, por ejemplo 2dp o 4dp)
+                                        "shadowRadius": "8dp",      # Grosor del contorno (ajústalo a tu gusto, por ejemplo 2dp o 4dp)
                                         "shadowOpacity": 1.0        # Totalmente sólido para que parezca borde y no sombra difuminada
                                     },
                                     # 4. Texto fonético (¡Más grande!)
@@ -70,7 +70,14 @@ def fase_1_gui():
                                         "color": "#E0E0E0",
                                         "fontStyle": "italic",
                                         "marginTop": "8dp",         # Modificado: Más aire con la palabra principal
-                                        "fontWeight": "300"
+                                        # --- TRUCO PARA EL BORDE DE COLOR ---
+                                        "shadowColor": "#FF8000",   # Color del borde (Negro en este caso)
+                                        "shadowOffset": {
+                                            "width": 0, 
+                                            "height": 0             # Centrado para que abrace toda la letra
+                                        },
+                                        "shadowRadius": "8dp",      # Grosor del contorno (ajústalo a tu gusto, por ejemplo 2dp o 4dp)
+                                        "shadowOpacity": 1.0 
                                     }
                                 ]
                             },
