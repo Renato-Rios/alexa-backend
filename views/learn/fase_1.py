@@ -48,10 +48,10 @@ def fase_1_gui():
                                     {
                                         "type": "Text",
                                         "text": "${payload.datosFase.word}",
-                                        "fontSize": "54dp",
+                                        "fontSize": "64dp",
                                         "fontWeight": "800",
                                         "color": "#FFFFFF",
-                                        "marginTop": "24dp",
+                                        "marginTop": "32dp",
                                         "shadowColor": "#000000",
                                         "shadowOffset": {"width": 0, "height": 2},
                                         "shadowRadius": "4dp"
@@ -60,7 +60,7 @@ def fase_1_gui():
                                     {
                                         "type": "Text",
                                         "text": "${payload.datosFase.phonetic}",
-                                        "fontSize": "26dp",
+                                        "fontSize": "34dp",
                                         "color": "#E0E0E0",
                                         "fontStyle": "italic",
                                         "marginTop": "4dp",
@@ -95,10 +95,10 @@ def fase_1_gui():
                                             "paddingBottom": "12dp",
                                             "item": {
                                                 "type": "Text",
-                                                "text": "🔀 MENÚ",
+                                                "text": "MENÚ",
                                                 "color": "white",
                                                 "fontWeight": "700",
-                                                "fontSize": "18dp"
+                                                "fontSize": "22dp"
                                             }
                                         }
                                     },
@@ -119,10 +119,10 @@ def fase_1_gui():
                                             "paddingBottom": "12dp",
                                             "item": {
                                                 "type": "Text",
-                                                "text": "SIGUIENTE ➡️",
+                                                "text": "SIGUIENTE",
                                                 "color": "#001e3d",
                                                 "fontWeight": "700",
-                                                "fontSize": "18dp"
+                                                "fontSize": "22dp"
                                             }
                                         }
                                     }
