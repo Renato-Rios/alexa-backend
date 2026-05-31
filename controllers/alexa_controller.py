@@ -307,14 +307,18 @@ def manejar_request(data):
             if porcentaje >= threshold:
                 # Incrementamos el contador para que avance en el patrón 2-1
                 session_attributes["contador_palabras"] = session_attributes.get("contador_palabras", 1) + 1
-                texto_alexa = f"¡Excelente! Conseguiste un {int(porcentaje)} por ciento de acierto. ¡Vamos a la siguiente palabra!"
                 
+                # 1. Buscamos la siguiente palabra PRIMERO para poder usar su texto en el mensaje de voz
                 siguiente = obtener_siguiente_palabra(patient_id, session_attributes)
+                
                 if siguiente:
                     # 🛠️ FIJACIÓN CRÍTICA: Guardamos los datos de la nueva palabra en la sesión
                     session_attributes["palabra_actual_id"] = siguiente["id"]
                     session_attributes["palabra_actual_texto"] = siguiente["word"]
                     session_attributes["timestamp_inicio"] = time.time()  # Reseteamos el cronómetro
+                    
+                    # 🗣️ Modificamos el texto para que anuncie dinámicamente la siguiente palabra
+                    texto_alexa = f"¡Excelente! Conseguiste un {int(porcentaje)} por ciento de acierto. ¡Vamos a la siguiente palabra! Intenta decir: {siguiente['word']}."
                     
                     return jsonify({
                         "version": "1.0",
@@ -338,12 +342,12 @@ def manejar_request(data):
                         }
                     })
                 else:
-                    # Si ya no quedan palabras en la BD (caso extremo)
+                    # Si ya no quedan palabras en la BD (caso extremo o fin de ronda)
                     return jsonify({
                         "version": "1.0",
                         "sessionAttributes": session_attributes,
                         "response": {
-                            "outputSpeech": {"type": "PlainText", "text": "¡Increíble! Completaste todas las palabras disponibles."},
+                            "outputSpeech": {"type": "PlainText", "text": f"¡Increíble! Conseguiste un {int(porcentaje)} por ciento de acierto y completaste todas las palabras disponibles de esta ronda."},
                             "shouldEndSession": False
                         }
                     })
